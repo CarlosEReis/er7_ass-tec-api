@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.carloser7.asstecnica.model.Cliente;
 import br.com.carloser7.asstecnica.repository.ClienteRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/clientes")
@@ -22,4 +23,8 @@ public class ClienteController {
         return this.clienteRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Cliente buscarPorId(@PathVariable Integer id) {
+        return this.clienteRepository.findById(id).get();
+    }
 }
