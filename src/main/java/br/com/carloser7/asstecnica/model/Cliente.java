@@ -1,6 +1,7 @@
 package br.com.carloser7.asstecnica.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,7 +17,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nome; 
+    private String nome;
     private String fantasia;
     private String documento;
 
@@ -31,6 +32,9 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_pessoa")
     private TipoCliente tipoPessoa;
+
+    @Embedded
+    private Endereco endereco;
 
     public Integer getId() {
         return id;
@@ -102,6 +106,14 @@ public class Cliente {
 
     public void setTipoPessoa(TipoCliente tipoPessoa) {
         this.tipoPessoa = tipoPessoa;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     @Override
