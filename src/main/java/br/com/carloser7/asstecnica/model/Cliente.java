@@ -9,6 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "cliente")
@@ -17,8 +22,16 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank
+    @Size(min=5, max=40)
     private String nome;
+ 
+    @Size(min = 5, max = 20)
     private String fantasia;
+    
+    @NotBlank
+    @Size(max=14)
     private String documento;
 
     @Column(name = "inscricao")
@@ -26,13 +39,21 @@ public class Cliente {
 
     @Column(name = "tabela_preco")
     private String tabelaPreco;
+
+    @NotNull
+    @Email
     private String email;
+
+    @NotBlank
     private String telefone;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_pessoa")
     private TipoCliente tipoPessoa;
 
+    @Valid
+    @NotNull
     @Embedded
     private Endereco endereco;
 

@@ -1,18 +1,14 @@
 package br.com.carloser7.asstecnica.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.EntityResponse;
-
 import br.com.carloser7.asstecnica.model.Cliente;
 import br.com.carloser7.asstecnica.repository.ClienteRepository;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +24,7 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @PostMapping
-    public ResponseEntity<Cliente> adicionar(@RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente) {
         var clienteSalvo = this.clienteRepository.save(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
