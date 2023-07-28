@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS ocorrencia_ct (
     serial VARCHAR(50),
     descricao VARCHAR(400) NOT NULL,
     id_chamado INT NOT NULL,
-    FOREIGN KEY (id_chamado) REFERENCES cliente(id)
+    FOREIGN KEY (id_chamado) REFERENCES chamado_tec(id)
 ) Engine=InnoDb;
 
 INSERT INTO chamado_tec (dtcriacao, status,id_cliente) VALUES 
