@@ -1,8 +1,10 @@
 package br.com.carloser7.asstecnica.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,8 +35,8 @@ public class ChamadoTecnico {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @OneToMany(mappedBy="chamadoTecnico")
-    private List<ItemChamadoTecnico> itens;
+    @OneToMany(mappedBy="chamadoTecnico", cascade = CascadeType.ALL)
+    private List<ItemChamadoTecnico> itens = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -100,5 +102,5 @@ public class ChamadoTecnico {
             return false;
         return true;
     }
-
+    
 }
