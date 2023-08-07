@@ -1,9 +1,11 @@
 package br.com.carloser7.asstecnica.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,8 +54,26 @@ public class ChamadoTecnicoController {
     @PostMapping
     public ChamadoTecnico criar(@RequestBody ChamadoInput chamadoInput) {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
+        chamadoTecnico.getItens().forEach(item -> item.setChamadoTecnico(chamadoTecnico));
         ChamadoTecnico chamadoTecnicoSave = this.chamadoTecnicoRepository.save(chamadoTecnico);
         return chamadoTecnicoSave;
+    }
+
+    @PutMapping("/{chamadoId}")
+    public ChamadoTecnico atualizar(@PathVariable Integer chamadoId, @RequestBody ChamadoInput chamadoInput) {
+
+        Optional<ChamadoTecnico> chamadoBanco = this.chamadoTecnicoRepository.findById(chamadoId);
+
+        if (chamadoBanco.isPresent()) {
+            ChamadoTecnico novoChamado = this.toDomainObject(chamadoInput);
+
+            chamadoBanco.get().getItens().clear();
+            chamadoBanco.get().getItens().addAll(novoChamado.getItens());
+            chamadoBanco.get().getItens().forEach(item -> item.setChamadoTecnico(chamadoBanco.get()));
+
+            this.chamadoTecnicoRepository.save(chamadoBanco.get());
+        }
+        return chamadoBanco.get();
     }
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
@@ -76,6 +97,7 @@ public class ChamadoTecnicoController {
 
     private ItemChamadoTecnico toDomainObject(ItemChamadoInput input) {
         var itemChamado = new ItemChamadoTecnico();
+        itemChamado.setId(input.getId());
         itemChamado.setStatus(StatusItemChamadoTecnico.PENDENTE);
         itemChamado.setSku(input.getSku());
         itemChamado.setSerial(input.getSerial());

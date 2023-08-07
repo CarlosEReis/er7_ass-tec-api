@@ -22,11 +22,5 @@ public class ChamadoInput {
     public void setItens(List<ItemChamadoInput> itens) {
         this.itens = itens;
     }
-
-    @Override
-    public String toString() {
-        return "ChamadoInput [cliente=" + cliente + ", itens=" + itens + "]";
-    }
-
     
 }

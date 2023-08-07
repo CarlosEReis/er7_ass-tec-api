@@ -2,9 +2,18 @@ package br.com.carloser7.asstecnica.api.model.input;
 
 public class ItemChamadoInput {
 
+    private Integer id;
     private String sku;
     private String serial;
     private String descricao;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getSku() {
         return sku;
@@ -28,11 +37,6 @@ public class ItemChamadoInput {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemChamadoInput [sku=" + sku + ", serial=" + serial + ", descricao=" + descricao + "]";
     }
 
     @Override
@@ -60,5 +64,4 @@ public class ItemChamadoInput {
         return true;
     }
 
-    
 }
