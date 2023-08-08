@@ -1,5 +1,9 @@
 package br.com.carloser7.asstecnica.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -8,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -56,6 +61,9 @@ public class Cliente {
     @NotNull
     @Embedded
     private Endereco endereco;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contato> contatos = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -135,6 +143,14 @@ public class Cliente {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public List<Contato> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(List<Contato> contatos) {
+        this.contatos = contatos;
     }
 
     @Override
