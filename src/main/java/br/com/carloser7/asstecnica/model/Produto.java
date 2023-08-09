@@ -12,9 +12,10 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String sku;
-    String nome;
+    private Integer id;
+    private String sku;
+    private String nome;
+    private String descricao;
 
     public Integer getId() {
         return id;
@@ -38,6 +39,14 @@ public class Produto {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     @Override

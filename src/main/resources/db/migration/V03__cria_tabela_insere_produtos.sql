@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS produto (
     id INT PRIMARY KEY AUTO_INCREMENT,
     sku VARCHAR(15) NOT NULL UNIQUE,
-    nome VARCHAR(70) NOT NULL
+    nome VARCHAR(70) NOT NULL,
+    descricao VARCHAR(255)
 ) Engine=InnoDB;
 
 
