@@ -9,10 +9,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -37,6 +41,12 @@ public class ChamadoTecnico {
 
     @OneToMany(mappedBy="chamadoTecnico", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<ItemChamadoTecnico> itens = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable( name = "chamado_contato",
+        joinColumns = @JoinColumn(name = "id_chamado"),
+        inverseJoinColumns = @JoinColumn(name = "id_contato"))
+    private List<Contato> contatos = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -76,6 +86,14 @@ public class ChamadoTecnico {
 
     public void setItens(List<ItemChamadoTecnico> itens) {
         this.itens = itens;
+    }
+
+    public List<Contato> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(List<Contato> contatos) {
+        this.contatos = contatos;
     }
 
     @Override
