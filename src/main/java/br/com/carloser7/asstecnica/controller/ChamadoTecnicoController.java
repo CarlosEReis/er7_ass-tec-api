@@ -1,12 +1,9 @@
 package br.com.carloser7.asstecnica.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -20,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
+import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
 import br.com.carloser7.asstecnica.model.ChamadoTecnico;
 import br.com.carloser7.asstecnica.model.Cliente;
+import br.com.carloser7.asstecnica.model.Contato;
 import br.com.carloser7.asstecnica.model.ItemChamadoTecnico;
 import br.com.carloser7.asstecnica.model.StatusChamadoTecnico;
 import br.com.carloser7.asstecnica.model.StatusItemChamadoTecnico;
 import br.com.carloser7.asstecnica.projection.ChamadoTecnicoProjection;
 import br.com.carloser7.asstecnica.repository.ChamadoTecnicoRepository;
+import jakarta.validation.Valid;
 
 @CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RestController
@@ -52,7 +52,7 @@ public class ChamadoTecnicoController {
     }
 
     @PostMapping
-    public ChamadoTecnico criar(@RequestBody ChamadoInput chamadoInput) {
+    public ChamadoTecnico criar(@RequestBody @Valid ChamadoInput chamadoInput) {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
         chamadoTecnico.getItens().forEach(item -> item.setChamadoTecnico(chamadoTecnico));
         ChamadoTecnico chamadoTecnicoSave = this.chamadoTecnicoRepository.save(chamadoTecnico);
@@ -92,6 +92,17 @@ public class ChamadoTecnicoController {
                 chamadoTecnico.getItens().add(toDomainObject(item));
             }
         );
+
+        chamadoInput.getContatos().forEach( 
+            (contatoInput) -> 
+                {
+                    var c = toDomainObject(contatoInput);
+                    c.setCliente(cliente);
+                    chamadoTecnico.getContatos().add(c);
+                
+                }
+        );
+
         return chamadoTecnico;
     }
 
@@ -103,5 +114,14 @@ public class ChamadoTecnicoController {
         itemChamado.setSerial(input.getSerial());
         itemChamado.setDescricao(input.getDescricao());
         return itemChamado;
+    }
+
+    private Contato toDomainObject(ContatoInput contatoInput) {
+        Contato contato = new Contato();
+        contato.setId(contatoInput.id());
+        /**contato.setNome(contatoInput.nome());
+        contato.setEmail(contatoInput.email());
+        contato.setTelefone(contatoInput.telefone());**/
+        return contato;
     }
 }
