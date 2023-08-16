@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.carloser7.asstecnica.service.ChamadoTecnicoService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +40,9 @@ public class ChamadoTecnicoController {
 
     @Autowired
     private ChamadoTecnicoRepository chamadoTecnicoRepository;
+
+    @Autowired
+    private ChamadoTecnicoService chamadoTecnicoService;
 
     @GetMapping()
     public List<ChamadoTecnicoProjection> pesquisar(String nome) {
@@ -74,6 +81,13 @@ public class ChamadoTecnicoController {
             this.chamadoTecnicoRepository.save(chamadoBanco.get());
         }
         return chamadoBanco.get();
+    }
+
+    @GetMapping("/{idChamado}/ficha")
+    public ResponseEntity<byte[]> fichaChamadoTecnicoPDF(@PathVariable Integer idChamado) throws JRException {
+        byte[] ficha = this.chamadoTecnicoService.relatorioFichaChamadoTecnico(idChamado);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {

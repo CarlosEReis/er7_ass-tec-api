@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chamadotecnico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb33413f-f9df-41e7-805e-ac5ea9c3ae61">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Chamados ClassBuilder"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="359"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="634"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="cliente" class="br.com.carloser7.asstecnica.model.Cliente">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="itens" class="java.util.List">
+		<fieldDescription><![CDATA[itens]]></fieldDescription>
+	</field>
+	<field name="contatos" class="java.util.List">
+		<fieldDescription><![CDATA[contatos]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="dataCriacao" class="java.time.LocalDateTime">
+		<fieldDescription><![CDATA[dataCriacao]]></fieldDescription>
+	</field>
+	<field name="status" class="br.com.carloser7.asstecnica.model.StatusChamadoTecnico">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="301" y="22" width="254" height="38" uuid="328213fe-74c2-4592-8ca5-a3f6916bb702"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Av. Piracema, 669 – Tamboré/SP – Cep.: 06460-030
+Tel: +55 (11) 98366-1362
+www.er7sistemas.com.br / sac@er7sistemas.com.br]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="12" width="254" height="11" forecolor="#0057A8" uuid="63c420cb-1429-4abe-8e76-23f29ddc5fce">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ER7 SISTEMAS DE SOFTWARE LTDA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="66" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="40" width="555" height="26" uuid="316b0ccf-bf44-447f-8451-e563c8c3419a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[(Enquadram-se neste caso toda empresa jurídica que possua regime período de apuração. A constatação deste cenário
+pode ser feita por meio da inscrição estadual e o código da atividade econômica exercida CNAE).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#0057A8" uuid="24776d63-6dbc-49f3-b7c1-2abbcf1a91de">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMULÁRIO DE ENVIO DE EQUIPAMENTO PARA ASSISTÊNCIA TÉCNICA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="20" forecolor="#030000" backcolor="#FFFFFF" uuid="30ea9ded-367d-45fc-b35c-50d7a04fa3c2">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box padding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTES CONTRIBUINTES]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="120" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" forecolor="#0057A8" backcolor="#FFFFFF" uuid="e344cf50-5027-4080-b678-c8f408783f80">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="5" leftPadding="1" bottomPadding="5" rightPadding="1">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados do cliente]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="30" width="555" height="50" uuid="23d62b50-24bb-4f28-8735-69198a6683a1"/>
+				<staticText>
+					<reportElement x="0" y="0" width="40" height="16" uuid="2b00db97-12a6-4f6e-aae4-ccd3c374f44d">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Cliente: ]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="16" width="555" height="1" uuid="e5477b8e-561f-4596-a2d9-08fe3bab3caf"/>
+				</line>
+				<textField>
+					<reportElement x="40" y="0" width="320" height="16" uuid="f83cf31d-e3f7-413b-aeff-e4a83f34b1ca">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getNome()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="360" y="0" width="70" height="16" uuid="ee68f181-d82e-4e02-b965-e3ef58e5c3c0">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Documento: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="430" y="0" width="125" height="16" uuid="7bd6fd92-495a-48ac-8d31-f48115bb11df">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getDocumento()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="50" y="17" width="210" height="16" uuid="86078f01-e7b3-4f04-93ae-563d2ed8d0f9">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().logradouro()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="17" width="50" height="16" uuid="ae60f192-ae2b-424f-81d7-db998da72323">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Endereço:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="301" y="17" width="59" height="16" uuid="da517396-3e68-4c66-b813-cfa8b65431fd">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().numero()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="260" y="17" width="40" height="16" uuid="ca978b90-25c5-494f-bdcf-108f47698c71">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Número: ]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="33" width="555" height="1" uuid="b5b9c3d2-0848-4f5a-9468-94596d7964d1"/>
+				</line>
+				<staticText>
+					<reportElement x="360" y="17" width="70" height="16" uuid="7e85b1af-26e2-44ab-bcad-1bd11c3b2cda">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Complemento:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="430" y="17" width="125" height="16" uuid="88b169ba-aa21-4126-a56b-21de2ae3c013">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().complemento()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="100" y="33" width="40" height="16" uuid="61569129-fd24-4e10-b871-9439ad12a500">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Bairro:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="140" y="33" width="160" height="16" uuid="2ff08f4a-a103-4464-9162-f1e9ad1999e3">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().bairro()]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="49" width="555" height="1" uuid="dee2746b-e875-4c8f-a916-eb272f77fb41">
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+				</line>
+				<staticText>
+					<reportElement x="299" y="33" width="40" height="16" uuid="7ba13959-e68f-4627-aee3-db08037ad2d1">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Cidade:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="480" y="33" width="40" height="16" uuid="e58dcb24-3570-4831-9373-93b4af3989a9">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[Estado:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="340" y="33" width="135" height="16" uuid="da1b9713-e90e-4b7f-8ce6-71f657a21aba">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().cidade()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="520" y="33" width="35" height="16" uuid="97569da1-c9d2-4bbf-abff-ab7b3ae2dec2">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().estado()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="33" width="30" height="16" uuid="d38bd1f6-654e-4671-9f82-4fd8392df7ab">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box padding="2"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<text><![CDATA[CEP:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="30" y="33" width="70" height="16" uuid="14cfc2bf-7b7a-4a30-836f-033bb0b0d2db">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}.getEndereco().cep()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="80" width="555" height="40" uuid="00271e6d-e906-4814-996c-a1e1b47c04b9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+	(java.util.List<br.com.carloser7.asstecnica.model.Contato>)$F{contatos}
+)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["ficha-chamado-contatos-embed.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="91">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="555" height="51" uuid="c8309c0c-6042-419a-b8f5-f163038d72f4">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource( (java.util.List<br.com.carloser7.asstecnica.model.ItemChamadoTecnico>)$F{itens}
+)]]></dataSourceExpression>
+				<subreportExpression><![CDATA["ficha-chamado-ocorrencias-embed.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="330" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="130" width="520" height="150" uuid="6a9d487d-ec20-408f-a004-a9381d217905">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="6" leftPadding="6" bottomPadding="6" rightPadding="6"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[
+Observação: Informamos que encomendas encaminhadas sem este documento estão sujeitas a recusa de seu recebimento.
+Condições Gerais:
+
+1. A assistência técnica só analisará os equipamentos com a prévia autorização do cliente, mediante o preenchimento (por completo) e assinatura
+deste documento;
+2. A responsabilidade pelos custos com o transporte do equipamento são do cliente conforme as diretrizes de nossa Politica de
+Vendas/Garantia.
+3. Quando o equipamento estiver dentro do periodo de garantia o cliente deverá encaminhar a Nota Fiscal de aquisição do
+produto.
+4. Após o cadastro do material será informado por e-mail o número do chamado técnico para acompanhamento.
+Declaro estar de acordo com as informações descritas nas condições gerais acima]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="50" width="520" height="80" uuid="b26aa9f4-6897-4b03-9fd5-c428020b1b3c">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="6" leftPadding="6" bottomPadding="6" rightPadding="6">
+					<pen lineColor="#0057A8"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#0057A8"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Emitir nota fiscal com a CFOP 5915 / 6915 (5915 se a localização do emitente for SP e 6915 se a localização do emitente for de outra UF),
+ICMS não incide conforme artigo 7°, inciso IX do RICMS/2000, IPI não incide conforme artigo 5°, inciso IX do RIPI/2002.
+
+Razão Social: ER7 SISTEMAS DE SOFTWARE LTDA
+Endereço: Av. Piracema, 669 – Tamboré- Barueri/SP – Cep.: 06460-030 Tel: +55 (11) 98366-1362
+CNPJ. 68.991.643/0001-88 – Inscrição Estadual: 628.151.090.054]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="10" width="555" height="30" forecolor="#0057A8" uuid="baf35b93-d5b3-4145-b6ee-35855ff6293f">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTE FORMULÁRIO DEVE SER PREENCHIDO, ASSINADO E ENVIADO JUNTO AO EQUIPAMENTO.
+INFORMAÇÕES PARA EMISSÃO DA NF DE REMESSA PARA CONSERTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="110" y="310" width="220" height="1" uuid="17a9c2d6-04ac-4469-b6bc-55e490a8389d">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="110" y="310" width="220" height="20" uuid="f4e13da6-4bf9-4ef9-8f1e-28cf8a0b3c64"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Assinatura do Responsável pelo envio]]></text>
+			</staticText>
+			<line>
+				<reportElement x="340" y="310" width="110" height="1" uuid="25878bc7-1d03-465d-9ab7-3896b76b3c58">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="340" y="310" width="110" height="20" uuid="3d5eb28e-7f39-408e-8abb-2a57e8dc36c4"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
