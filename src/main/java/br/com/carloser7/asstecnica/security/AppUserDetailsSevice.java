@@ -22,6 +22,7 @@ public class AppUserDetailsSevice implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
         Usuario usuario = this.usuarioRepository.findByEmail(email).orElseThrow(() ->
                 new EmptyResultDataAccessException("Usuário com o e-mail" + email + " não foi encontrado", 1));
         return new UsuarioSistema(usuario, getPermissoes(usuario));
