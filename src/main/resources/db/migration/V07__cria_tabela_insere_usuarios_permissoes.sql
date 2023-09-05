@@ -11,9 +11,10 @@ CREATE TABLE IF NOT EXISTS permissao (
 ) Engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS usuario_permissao (
+    id INT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_permissao INT NOT NULL,
-    PRIMARY KEY (id_usuario, id_permissao),
+
     FOREIGN KEY (id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (id_permissao) REFERENCES permissao(id)
 ) ENGINE=InnoDB;
@@ -26,7 +27,8 @@ INSERT INTO permissao (id, nome) values
 (1, 'ROLE_WRITE'),
 (2, 'ROLE_READ');
 
-INSERT INTO usuario_permissao (id_usuario, id_permissao) values
-(1, 1),
-(2, 2);
+INSERT INTO usuario_permissao ( id, id_usuario, id_permissao) values
+(1, 1, 1),
+(2, 1, 2),
+(3, 2, 2);
 
