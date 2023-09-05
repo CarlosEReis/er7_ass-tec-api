@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.service;
+package br.com.carloser7.asstecnica.domain.service;
 
 import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import br.com.carloser7.asstecnica.service.ChamadoTecnicoService;
+import br.com.carloser7.asstecnica.domain.service.ChamadoTecnicoService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
