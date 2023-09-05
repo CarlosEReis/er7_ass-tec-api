@@ -1,6 +1,6 @@
 package br.com.carloser7.asstecnica.security;
 
-import br.com.carloser7.asstecnica.model.Usuario;
+import br.com.carloser7.asstecnica.domain.model.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

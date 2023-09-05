@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.model;
+package br.com.carloser7.asstecnica.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

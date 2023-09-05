@@ -1,6 +1,6 @@
 package br.com.carloser7.asstecnica.service;
 
-import br.com.carloser7.asstecnica.model.ChamadoTecnico;
+import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
 import br.com.carloser7.asstecnica.repository.ChamadoTecnicoRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;

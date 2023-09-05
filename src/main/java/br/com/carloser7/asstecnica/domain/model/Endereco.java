@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.model;
+package br.com.carloser7.asstecnica.domain.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;

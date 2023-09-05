@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.com.carloser7.asstecnica.model.Cliente;
+import br.com.carloser7.asstecnica.domain.model.Cliente;
 import br.com.carloser7.asstecnica.repository.ClienteRepository;
 import jakarta.validation.Valid;
 

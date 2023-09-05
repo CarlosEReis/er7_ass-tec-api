@@ -1,36 +1,21 @@
-package br.com.carloser7.asstecnica.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package br.com.carloser7.asstecnica.domain.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ocorrencia_ct")
-public class ItemChamadoTecnico {
+@Table(name = "produto")
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Enumerated(EnumType.STRING)
-    private StatusItemChamadoTecnico status;
-    
     private String sku;
-    private String serial;
+    private String nome;
     private String descricao;
-
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "id_chamado")
-    private ChamadoTecnico chamadoTecnico;
 
     public Integer getId() {
         return id;
@@ -38,14 +23,6 @@ public class ItemChamadoTecnico {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public StatusItemChamadoTecnico getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusItemChamadoTecnico status) {
-        this.status = status;
     }
 
     public String getSku() {
@@ -56,12 +33,12 @@ public class ItemChamadoTecnico {
         this.sku = sku;
     }
 
-    public String getSerial() {
-        return serial;
+    public String getNome() {
+        return nome;
     }
 
-    public void setSerial(String serial) {
-        this.serial = serial;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getDescricao() {
@@ -70,14 +47,6 @@ public class ItemChamadoTecnico {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public ChamadoTecnico getChamadoTecnico() {
-        return chamadoTecnico;
-    }
-
-    public void setChamadoTecnico(ChamadoTecnico chamadoTecnico) {
-        this.chamadoTecnico = chamadoTecnico;
     }
 
     @Override
@@ -96,7 +65,7 @@ public class ItemChamadoTecnico {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ItemChamadoTecnico other = (ItemChamadoTecnico) obj;
+        Produto other = (Produto) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
