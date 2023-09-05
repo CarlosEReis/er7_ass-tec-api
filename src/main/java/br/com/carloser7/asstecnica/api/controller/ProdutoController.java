@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.controller;
+package br.com.carloser7.asstecnica.api.controller;
 
 import java.util.List;
 
