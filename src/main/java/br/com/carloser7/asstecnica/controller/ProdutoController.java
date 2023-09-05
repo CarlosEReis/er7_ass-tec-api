@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carloser7.asstecnica.domain.model.Produto;
-import br.com.carloser7.asstecnica.repository.ProdutoRepository;
+import br.com.carloser7.asstecnica.domain.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/produtos")

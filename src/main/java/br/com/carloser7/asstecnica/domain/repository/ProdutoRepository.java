@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.repository;
+package br.com.carloser7.asstecnica.domain.repository;
 
 import java.util.List;
 

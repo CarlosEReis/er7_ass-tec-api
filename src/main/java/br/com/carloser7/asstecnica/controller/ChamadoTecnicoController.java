@@ -30,7 +30,7 @@ import br.com.carloser7.asstecnica.domain.model.ItemChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.model.StatusChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.model.StatusItemChamadoTecnico;
 import br.com.carloser7.asstecnica.projection.ChamadoTecnicoProjection;
-import br.com.carloser7.asstecnica.repository.ChamadoTecnicoRepository;
+import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
 import jakarta.validation.Valid;
 
 @CrossOrigin(originPatterns = "*", allowedHeaders = "*")

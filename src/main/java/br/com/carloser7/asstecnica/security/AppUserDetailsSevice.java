@@ -1,7 +1,7 @@
 package br.com.carloser7.asstecnica.security;
 
 import br.com.carloser7.asstecnica.domain.model.Usuario;
-import br.com.carloser7.asstecnica.repository.UsuarioRepository;
+import br.com.carloser7.asstecnica.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.GrantedAuthority;
