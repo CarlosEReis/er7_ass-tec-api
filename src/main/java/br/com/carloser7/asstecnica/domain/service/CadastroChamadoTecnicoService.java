@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.domain.service;
 
+import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
 import net.sf.jasperreports.engine.*;
@@ -14,13 +15,20 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ChamadoTecnicoService {
+public class CadastroChamadoTecnicoService {
 
     @Autowired
-    private ChamadoTecnicoRepository repository;
+    private ChamadoTecnicoRepository chamadoRepository;
+
+    public ChamadoTecnico buscar(Integer chamadoId) {
+        return chamadoRepository
+            .findById(chamadoId)
+            .orElseThrow(
+                () -> new ChamadoTecnicoNaoEncontradoException(chamadoId));
+    }
 
     public byte[] relatorioFichaChamadoTecnico(Integer idChamado) throws JRException {
-        ChamadoTecnico chamadoTecnico = this.repository
+        ChamadoTecnico chamadoTecnico = this.chamadoRepository
                 .findById(idChamado)
                 .orElseThrow(
                 () -> new EmptyResultDataAccessException("Produto com o id " + idChamado + " não foi encontrado", 1));
