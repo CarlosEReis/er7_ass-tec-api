@@ -8,7 +8,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="cliente" class="br.com.carloser7.asstecnica.model.Cliente">
+	<field name="cliente" class="br.com.carloser7.asstecnica.domain.model.Cliente">
 		<fieldDescription><![CDATA[cliente]]></fieldDescription>
 	</field>
 	<field name="itens" class="java.util.List">
@@ -23,7 +23,7 @@
 	<field name="dataCriacao" class="java.time.LocalDateTime">
 		<fieldDescription><![CDATA[dataCriacao]]></fieldDescription>
 	</field>
-	<field name="status" class="br.com.carloser7.asstecnica.model.StatusChamadoTecnico">
+	<field name="status" class="br.com.carloser7.asstecnica.domain.model.StatusChamadoTecnico">
 		<fieldDescription><![CDATA[status]]></fieldDescription>
 	</field>
 	<background>
@@ -307,7 +307,7 @@ pode ser feita por meio da inscrição estadual e o código da atividade econôm
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
-	(java.util.List<br.com.carloser7.asstecnica.model.Contato>)$F{contatos}
+	(java.util.List<br.com.carloser7.asstecnica.domain.model.Contato>)$F{contatos}
 )]]></dataSourceExpression>
 				<subreportExpression><![CDATA["ficha-chamado-contatos-embed.jasper"]]></subreportExpression>
 			</subreport>
@@ -319,7 +319,7 @@ pode ser feita por meio da inscrição estadual e o código da atividade econôm
 				<reportElement positionType="Float" x="0" y="0" width="555" height="51" uuid="c8309c0c-6042-419a-b8f5-f163038d72f4">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource( (java.util.List<br.com.carloser7.asstecnica.model.ItemChamadoTecnico>)$F{itens}
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource( (java.util.List<br.com.carloser7.asstecnica.domain.model.ItemChamadoTecnico>)$F{itens}
 )]]></dataSourceExpression>
 				<subreportExpression><![CDATA["ficha-chamado-ocorrencias-embed.jasper"]]></subreportExpression>
 			</subreport>
