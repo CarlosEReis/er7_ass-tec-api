@@ -1,6 +1,8 @@
 package br.com.carloser7.asstecnica.api.controller;
 
 import java.util.List;
+
+import br.com.carloser7.asstecnica.domain.service.CadastroClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private CadastroClienteService cadastroClienteService;
+
     @PostMapping
     public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente) {
         cliente.getContatos().forEach( contato -> contato.setCliente(cliente));
@@ -43,8 +48,8 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id) {
-        var cliente = this.clienteRepository.findById(id);
-        return cliente.isPresent() ? ResponseEntity.ok(cliente.get()) : ResponseEntity.notFound().build();
+        var cliente = cadastroClienteService.buscar(id);
+        return ResponseEntity.ok(cliente);
     }
 
     @DeleteMapping("/{id}")
