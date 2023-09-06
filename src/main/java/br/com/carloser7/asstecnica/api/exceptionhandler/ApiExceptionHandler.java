@@ -1,4 +1,4 @@
-package br.com.carloser7.asstecnica.exceptionhandler;
+package br.com.carloser7.asstecnica.api.exceptionhandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
