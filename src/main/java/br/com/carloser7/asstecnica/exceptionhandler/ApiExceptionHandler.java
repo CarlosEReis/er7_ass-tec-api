@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.ClienteNaoEncontradoException;
+import br.com.carloser7.asstecnica.domain.exception.RecursoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -36,8 +38,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 
-    @ExceptionHandler(ClienteNaoEncontradoException.class)
-    public ResponseEntity<Object> handlerClienteNaoEncontradoException(ClienteNaoEncontradoException ex, WebRequest request) {
+    @ExceptionHandler({ RecursoNaoEncontradoException.class })
+    public ResponseEntity<Object> handlerClienteNaoEncontradoException(RecursoNaoEncontradoException ex, WebRequest request) {
         List<Erro> erros = List.of(new Erro(ex.getMessage(), ex.toString()));
         return handleExceptionInternal(ex, erros, new HttpHeaders(),HttpStatus.NOT_FOUND, request);
     }

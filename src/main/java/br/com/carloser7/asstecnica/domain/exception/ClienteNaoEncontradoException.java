@@ -1,14 +1,10 @@
 package br.com.carloser7.asstecnica.domain.exception;
 
-public class ClienteNaoEncontradoException extends RuntimeException {
+public class ClienteNaoEncontradoException extends RecursoNaoEncontradoException {
 
-    public static final String S_NÃO_EXISTE = "Cliente com o id %s não existe";
-
-    public ClienteNaoEncontradoException(String mensagem) {
-        super(mensagem);
-    }
+    public static final String CLIENTE_INEXISTENTE = "Cliente com o id %s não existe";
 
     public ClienteNaoEncontradoException(Integer clienteId) {
-        this(String.format(S_NÃO_EXISTE, clienteId));
+        super(String.format(CLIENTE_INEXISTENTE, clienteId));
     }
 }
