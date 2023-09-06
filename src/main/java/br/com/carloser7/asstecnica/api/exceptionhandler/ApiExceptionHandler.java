@@ -1,11 +1,5 @@
 package br.com.carloser7.asstecnica.api.exceptionhandler;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
-import br.com.carloser7.asstecnica.domain.exception.ClienteNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.RecursoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,6 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -33,51 +30,25 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		
-		List<Erro> erros = criaListaDeErros(ex.getBindingResult());
+		List<ApiErro> erros = criaListaDeErros(ex.getBindingResult());
 		
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
 
     @ExceptionHandler({ RecursoNaoEncontradoException.class })
     public ResponseEntity<Object> handlerClienteNaoEncontradoException(RecursoNaoEncontradoException ex, WebRequest request) {
-        List<Erro> erros = List.of(new Erro(ex.getMessage(), ex.toString()));
+        List<ApiErro> erros = List.of(new ApiErro(ex.getMessage(), ex.toString()));
         return handleExceptionInternal(ex, erros, new HttpHeaders(),HttpStatus.NOT_FOUND, request);
     }
 
-    private List<Erro> criaListaDeErros(BindingResult bindingResult) {
-        List<Erro> erros = new ArrayList<>();
+    private List<ApiErro> criaListaDeErros(BindingResult bindingResult) {
+        List<ApiErro> erros = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             var msgUsuario = this.messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
             var msgDesenvolvedor = fieldError.toString();
 
-            erros.add(new Erro(msgUsuario, msgDesenvolvedor));
+            erros.add(new ApiErro(msgUsuario, msgDesenvolvedor));
         }
         return erros;
     }
-
-    public static class Erro{
-        
-        private String msgUsuario;
-        private String msgDesenvolvedor;
-
-        public Erro(String msgUsuario, String msgDesenvolvedor){
-            this.msgUsuario = msgUsuario;
-            this.msgDesenvolvedor = msgDesenvolvedor;
-        }
-
-        public String getMsgUsuario() {
-            return msgUsuario;
-        }
-        public void setMsgUsuario(String msgUsuario) {
-            this.msgUsuario = msgUsuario;
-        }
-        public String getMsgDesenvolvedor() {
-            return msgDesenvolvedor;
-        }
-        public void setMsgDesenvolvedor(String msgDesenvolvedor) {
-            this.msgDesenvolvedor = msgDesenvolvedor;
-        }
-
-    } 
-
 }
