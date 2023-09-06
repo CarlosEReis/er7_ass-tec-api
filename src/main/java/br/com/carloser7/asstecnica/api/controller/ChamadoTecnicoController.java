@@ -1,39 +1,25 @@
 package br.com.carloser7.asstecnica.api.controller;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import br.com.carloser7.asstecnica.domain.service.ChamadoTecnicoService;
+import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
+import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
+import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
+import br.com.carloser7.asstecnica.domain.model.*;
+import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
+import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
+import br.com.carloser7.asstecnica.projection.ChamadoTecnicoProjection;
+import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
-import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
-import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
-import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
-import br.com.carloser7.asstecnica.domain.model.Cliente;
-import br.com.carloser7.asstecnica.domain.model.Contato;
-import br.com.carloser7.asstecnica.domain.model.ItemChamadoTecnico;
-import br.com.carloser7.asstecnica.domain.model.StatusChamadoTecnico;
-import br.com.carloser7.asstecnica.domain.model.StatusItemChamadoTecnico;
-import br.com.carloser7.asstecnica.projection.ChamadoTecnicoProjection;
-import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
-import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
-@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/chamados")
 public class ChamadoTecnicoController {
@@ -42,7 +28,7 @@ public class ChamadoTecnicoController {
     private ChamadoTecnicoRepository chamadoTecnicoRepository;
 
     @Autowired
-    private ChamadoTecnicoService chamadoTecnicoService;
+    private CadastroChamadoTecnicoService cadastroChamadoTecnicoService;
 
     @GetMapping()
     public List<ChamadoTecnicoProjection> pesquisar(String nome) {
@@ -52,10 +38,10 @@ public class ChamadoTecnicoController {
         return this.chamadoTecnicoRepository.findAllProjectionBy();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ChamadoTecnico> buscarPorId(@PathVariable Integer id) {
-        var cliente = this.chamadoTecnicoRepository.findById(id);
-        return cliente.isPresent() ? ResponseEntity.ok(cliente.get()) : ResponseEntity.notFound().build();
+    @GetMapping("/{chamadoId}")
+    public ResponseEntity<ChamadoTecnico> buscarPorId(@PathVariable Integer chamadoId) {
+        var chamadoTecnico = cadastroChamadoTecnicoService.buscar(chamadoId);
+        return ResponseEntity.ok(chamadoTecnico);
     }
 
     @PostMapping
@@ -85,7 +71,7 @@ public class ChamadoTecnicoController {
 
     @GetMapping("/{idChamado}/ficha")
     public ResponseEntity<byte[]> fichaChamadoTecnicoPDF(@PathVariable Integer idChamado) throws JRException {
-        byte[] ficha = this.chamadoTecnicoService.relatorioFichaChamadoTecnico(idChamado);
+        byte[] ficha = this.cadastroChamadoTecnicoService.relatorioFichaChamadoTecnico(idChamado);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }
