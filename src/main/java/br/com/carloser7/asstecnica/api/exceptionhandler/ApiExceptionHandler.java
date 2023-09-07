@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
@@ -26,15 +27,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ RecursoNaoEncontradoException.class })
     public ResponseEntity<Object> handlerClienteNaoEncontradoException(RecursoNaoEncontradoException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),HttpStatus.NOT_FOUND, request);
+        ApiErro apiErro = new ApiErro(
+                HttpStatus.NOT_FOUND.value(),
+                ErroType.RECURSO_NAO_ENCONTRADO,
+                ex.getMessage()
+        );
+        return handleExceptionInternal(ex, apiErro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        List<ApiErro> erros = List.of(new ApiErro(ex.getMessage(), ex.toString()));
-        return super.handleExceptionInternal(ex, erros, headers, statusCode, request);
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
+    /*
     private List<ApiErro> criaListaDeErros(BindingResult bindingResult) {
         List<ApiErro> erros = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -43,5 +49,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             erros.add(new ApiErro(msgUsuario, msgDesenvolvedor));
         }
         return erros;
-    }
+    }*/
 }
