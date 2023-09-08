@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 public record Endereco (
     
     @NotBlank String cep,
-    String logradouro,
-    String numero,
+    @NotBlank String logradouro,
+    @NotBlank String numero,
     String complemento,
     @NotBlank String bairro,
     @NotBlank String cidade,

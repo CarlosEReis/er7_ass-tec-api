@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "contato")
@@ -17,9 +19,19 @@ public class Contato {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank
+    @Size(min=9 , max = 30)
     private String nome;
+
+    @NotBlank
+    @Size(max = 40)
     private String email;
+
+    @NotBlank
+    @Size(max = 15)
     private String telefone;
+
     private String departamento;
 
     @ManyToOne
@@ -90,5 +102,4 @@ public class Contato {
         return true;
     }
 
-    
 }

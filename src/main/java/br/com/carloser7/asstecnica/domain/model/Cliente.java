@@ -62,6 +62,8 @@ public class Cliente {
     @Embedded
     private Endereco endereco;
 
+    @Valid
+    @NotNull
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Contato> contatos = new ArrayList<>();
 
