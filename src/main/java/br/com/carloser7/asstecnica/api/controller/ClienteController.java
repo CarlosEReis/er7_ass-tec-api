@@ -13,14 +13,12 @@ import br.com.carloser7.asstecnica.domain.model.Cliente;
 import br.com.carloser7.asstecnica.domain.repository.ClienteRepository;
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -33,7 +31,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente) {
-        cliente.getContatos().forEach( contato -> contato.setCliente(cliente));
+        cliente.getContatos().forEach(contato -> contato.setCliente(cliente));
         var clienteSalvo = this.clienteRepository.save(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
