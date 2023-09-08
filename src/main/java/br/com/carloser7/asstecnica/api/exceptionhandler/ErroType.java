@@ -2,7 +2,8 @@ package br.com.carloser7.asstecnica.api.exceptionhandler;
 
 public enum ErroType {
 
-    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado");
+    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
+    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos");
 
     private final String title;
     private final String uri;
