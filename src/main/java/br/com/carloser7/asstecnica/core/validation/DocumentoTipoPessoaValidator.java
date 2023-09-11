@@ -6,6 +6,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.BeanUtils;
 
+import java.util.Objects;
+
 public class DocumentoTipoPessoaValidator implements ConstraintValidator<DocumentoTipoPessoa, Object> {
 
     private String tipoPessoa;
@@ -24,7 +26,11 @@ public class DocumentoTipoPessoaValidator implements ConstraintValidator<Documen
             TipoCliente tipoPessoa = (TipoCliente) BeanUtils.getPropertyDescriptor(object.getClass(), this.tipoPessoa).getReadMethod().invoke(object);
             String documento = (String) BeanUtils.getPropertyDescriptor(object.getClass(), this.documento).getReadMethod().invoke(object);
 
+            if (Objects.isNull(tipoPessoa) || Objects.isNull(documento))
+                return false;
+
             if (tipoPessoa.equals(TipoCliente.JURIDICA)) valido = validaCNPJ(documento);
+
             if (tipoPessoa.equals(TipoCliente.FISICA)) valido = validaCPF(documento);
 
         } catch (Exception e) {
