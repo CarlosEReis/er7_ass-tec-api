@@ -11,7 +11,7 @@ public record ApiErro(
         String type,
         String title,
         String detail,
-        List<Field> fieldErrors) {
+        List<Field> errors) {
 
     public ApiErro(Integer status, ErroType erroType, String detail) {
         this(status, erroType.getUri(), erroType.getTitle(), detail, new ArrayList<>());
@@ -19,7 +19,7 @@ public record ApiErro(
 
     public ApiErro(Integer status, ErroType erroType, String detail, List<Field> fieldErrors) {
         this(status, erroType, detail);
-        this.fieldErrors.addAll(fieldErrors);
+        this.errors.addAll(fieldErrors);
     }
 
     public record Field(String name, String message) {
