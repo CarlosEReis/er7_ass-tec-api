@@ -1,14 +1,16 @@
 package br.com.carloser7.asstecnica.domain.repository;
 
+import br.com.carloser7.asstecnica.domain.model.Cliente;
+import br.com.carloser7.asstecnica.domain.repository.projection.ClienteView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import br.com.carloser7.asstecnica.domain.model.Cliente;
-import java.util.List;
 
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
- 
-    List<Cliente> findByNomeContaining(String nome);
+
+    Page<ClienteView> findAllBy(Pageable pageable);
+    Page<ClienteView> findByNomeContaining(String nome, Pageable pageable);
 }

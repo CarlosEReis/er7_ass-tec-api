@@ -1,9 +1,10 @@
 package br.com.carloser7.asstecnica.api.controller;
 
-import java.util.List;
-
 import br.com.carloser7.asstecnica.domain.service.CadastroClienteService;
+import br.com.carloser7.asstecnica.domain.repository.projection.ClienteView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -37,11 +38,11 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> pesquisar(String nome) {
+    public ResponseEntity<Page<ClienteView>> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
-            return this.clienteRepository.findByNomeContaining(nome);
+            return ResponseEntity.ok(this.clienteRepository.findByNomeContaining(nome, pageable));
         }
-        return this.clienteRepository.findAll();
+        return ResponseEntity.ok(this.clienteRepository.findAllBy(pageable));
     }
 
     @GetMapping("/{id}")
