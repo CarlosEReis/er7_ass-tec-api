@@ -6,10 +6,12 @@ import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
 import br.com.carloser7.asstecnica.domain.model.*;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
 import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
-import br.com.carloser7.asstecnica.projection.ChamadoTecnicoProjection;
+import br.com.carloser7.asstecnica.domain.repository.projection.ChamadoTecnicoView;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +33,13 @@ public class ChamadoTecnicoController {
     private CadastroChamadoTecnicoService cadastroChamadoTecnicoService;
 
     @GetMapping()
-    public List<ChamadoTecnicoProjection> pesquisar(String nome) {
+    public ResponseEntity<Page<ChamadoTecnicoView>> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
-            return this.chamadoTecnicoRepository.findByClienteNomeContaining(nome);
+            return ResponseEntity.ok(
+                this.chamadoTecnicoRepository.findByClienteNomeContaining(nome, pageable)
+            );
         }
-        return this.chamadoTecnicoRepository.findAllProjectionBy();
+        return ResponseEntity.ok(this.chamadoTecnicoRepository.findChamadoTecnicoBy(pageable));
     }
 
     @GetMapping("/{chamadoId}")
