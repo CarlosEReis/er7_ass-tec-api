@@ -1,7 +1,7 @@
 ALTER TABLE cliente 
 ADD COLUMN (
 	cep VARCHAR(9) NOT NULL,
-	logradouro VARCHAR(30),
+	logradouro VARCHAR(40),
     numero VARCHAR(30),
     complemento VARCHAR(30),
     bairro VARCHAR(40) NOT NULL,
