@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS cliente (
 ) ENGINE=InnoDB;
 
 INSERT INTO cliente (id, nome, fantasia, documento, inscricao, tabela_preco, email, telefone, tipo_pessoa) VALUES 
-(1, 'Jose Moraes Melo', NULL, '923.267.658-34', NULL, NULL, 'antonio@antonio.com.br', '(95) 67904-7031', 'FISICA'),
+(1, 'Jose Moraes Melo', NULL, '92326765834', NULL, NULL, 'antonio@antonio.com.br', '(95) 67904-7031', 'FISICA'),
 (2, 'Amaral Bragança Planejamento ME', 'Amaral Planejamento', '66526565000115', '75.791.206-0', NULL, 'planejamento.amaral@geradornv.com.br', '(97) 3861-3757', 'JURIDICA')
