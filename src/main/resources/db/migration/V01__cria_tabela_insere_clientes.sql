@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS cliente (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(40) NOT NULL,
-    fantasia VARCHAR(20),
+    fantasia VARCHAR(30),
     documento VARCHAR(14) NOT NULL,
     inscricao VARCHAR(18),
     tabela_preco INT,
