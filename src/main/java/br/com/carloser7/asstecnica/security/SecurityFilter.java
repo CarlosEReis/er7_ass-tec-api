@@ -1,6 +1,8 @@
 package br.com.carloser7.asstecnica.security;
 
 import java.io.IOException;
+
+import br.com.carloser7.asstecnica.domain.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +34,12 @@ public class SecurityFilter extends OncePerRequestFilter {
             UsuarioSistema user = (UsuarioSistema) userDetailsService.loadUserByUsername(email);
 
             var authetication = new UsernamePasswordAuthenticationToken(user.getUsuario().getEmail(), null, user.getAuthorities());
+
+            Usuario usuario = new Usuario();
+            usuario.setNome(user.getUsuario().getNome());
+            usuario.setEmail(user.getUsuario().getEmail());
+
+            authetication.setDetails(usuario);
             SecurityContextHolder.getContext().setAuthentication(authetication);
 
         }

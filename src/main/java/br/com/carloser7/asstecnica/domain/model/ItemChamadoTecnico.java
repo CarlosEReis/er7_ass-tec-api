@@ -2,15 +2,10 @@ package br.com.carloser7.asstecnica.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
+import java.util.Stack;
 
 @Entity
 @Table(name = "ocorrencia_ct")
@@ -19,18 +14,17 @@ public class ItemChamadoTecnico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Enumerated(EnumType.STRING)
-    private StatusItemChamadoTecnico status;
-    
     private String sku;
     private String serial;
     private String descricao;
 
-    @ManyToOne
     @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "id_chamado")
     private ChamadoTecnico chamadoTecnico;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<StatusItemChamadoObject> status = new Stack<>();
 
     public Integer getId() {
         return id;
@@ -38,14 +32,6 @@ public class ItemChamadoTecnico {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public StatusItemChamadoTecnico getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusItemChamadoTecnico status) {
-        this.status = status;
     }
 
     public String getSku() {
@@ -78,6 +64,23 @@ public class ItemChamadoTecnico {
 
     public void setChamadoTecnico(ChamadoTecnico chamadoTecnico) {
         this.chamadoTecnico = chamadoTecnico;
+    }
+
+    public List<StatusItemChamadoObject> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<StatusItemChamadoObject> status) {
+        this.status = status;
+    }
+
+    @Transient
+    public StatusItemChamadoTecnico getUtlimoStatus() {
+        if (this.status.isEmpty()) {
+            throw new IllegalStateException("Lista de status vazia.");
+        }
+        var statusSize = this.status.size();
+        return this.getStatus().get(statusSize - 1).getStatus();
     }
 
     @Override

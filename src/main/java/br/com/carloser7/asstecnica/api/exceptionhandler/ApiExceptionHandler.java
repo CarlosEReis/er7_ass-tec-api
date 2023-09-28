@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.api.exceptionhandler;
 
+import br.com.carloser7.asstecnica.domain.exception.OperacaoNaoPermitidaException;
 import br.com.carloser7.asstecnica.domain.exception.RecursoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -31,6 +32,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 ex.getMessage()
         );
         return handleExceptionInternal(ex, apiErro, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({ OperacaoNaoPermitidaException.class })
+    public ResponseEntity<Object> handlerOperacaoNaoPermitidaException(OperacaoNaoPermitidaException ex, WebRequest request) {
+        ApiErro apiErro = new ApiErro(
+            HttpStatus.BAD_REQUEST.value(),
+            ErroType.OPERACAO_NAO_PERMITIDA,
+            ex.getMessage()
+        );
+        return handleExceptionInternal(ex, apiErro, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override

@@ -3,22 +3,9 @@ package br.com.carloser7.asstecnica.domain.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "chamado_tec")
@@ -46,6 +33,9 @@ public class ChamadoTecnico {
         joinColumns = @JoinColumn(name = "id_chamado"),
         inverseJoinColumns = @JoinColumn(name = "id_contato"))
     private List<Contato> contatos = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chamaoTecnico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StatusChamadoObject> statusList = new Stack<>();
 
     public Integer getId() {
         return id;
@@ -93,6 +83,23 @@ public class ChamadoTecnico {
 
     public void setContatos(List<Contato> contatos) {
         this.contatos = contatos;
+    }
+
+    public List<StatusChamadoObject> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<StatusChamadoObject> statusList) {
+        this.statusList = statusList;
+    }
+
+    @Transient
+    public StatusChamadoTecnico getUltimoStatus() {
+        if (this.statusList.isEmpty()) {
+            throw new IllegalStateException("Lista de status vazia.");
+        }
+        var statusSize = this.statusList.size();
+        return this.statusList.get(statusSize - 1).getStatus();
     }
 
     @Override

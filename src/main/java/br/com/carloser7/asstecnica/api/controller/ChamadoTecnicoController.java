@@ -51,9 +51,7 @@ public class ChamadoTecnicoController {
     @PostMapping
     public ChamadoTecnico criar(@RequestBody @Valid ChamadoInput chamadoInput) {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
-        chamadoTecnico.getItens().forEach(item -> item.setChamadoTecnico(chamadoTecnico));
-        ChamadoTecnico chamadoTecnicoSave = this.chamadoTecnicoRepository.save(chamadoTecnico);
-        return chamadoTecnicoSave;
+        return this.cadastroChamadoTecnicoService.criar(chamadoTecnico);
     }
 
     @PutMapping("/{chamadoId}")
@@ -78,6 +76,17 @@ public class ChamadoTecnicoController {
         byte[] ficha = this.cadastroChamadoTecnicoService.relatorioFichaChamadoTecnico(idChamado);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
+    }
+
+    // REFATORAÇÃO DA ALTERAÇÃO DE STATUS
+    @PostMapping("/{idChamado}/alteracao-status")
+    public ChamadoTecnico alteracaoStatusChamado(@PathVariable Integer idChamado, @RequestBody StatusChamadoTecnico status) {
+        return this.cadastroChamadoTecnicoService.alterarStatusChamado(idChamado, status);
+    }
+
+    @PostMapping("/{idChamado}/alteracao-status-item/{idItemChamado}")
+    public Object alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody StatusItemChamadoTecnico status) {
+        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, status);
     }
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
@@ -113,7 +122,6 @@ public class ChamadoTecnicoController {
     private ItemChamadoTecnico toDomainObject(ItemChamadoInput input) {
         var itemChamado = new ItemChamadoTecnico();
         itemChamado.setId(input.getId());
-        itemChamado.setStatus(StatusItemChamadoTecnico.PENDENTE);
         itemChamado.setSku(input.getSku());
         itemChamado.setSerial(input.getSerial());
         itemChamado.setDescricao(input.getDescricao());
@@ -128,4 +136,5 @@ public class ChamadoTecnicoController {
         contato.setTelefone(contatoInput.telefone());**/
         return contato;
     }
+
 }
