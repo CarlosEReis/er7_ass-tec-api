@@ -1,4 +1,4 @@
-INSERT INTO chamado_tec (id, dtcriacao, status,id_cliente) VALUES
+INSERT INTO chamado (id, dtcriacao, status,id_cliente) VALUES
 (4, '2023-09-01 11:18:29', 'FINALIZADO', 3),
 (5, '2023-09-01 14:27:29', 'FINALIZADO', 4),
 (6, '2023-09-04 12:36:29', 'FILA', 5),

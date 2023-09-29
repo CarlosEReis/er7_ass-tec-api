@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS chamado_contato (
 
     PRIMARY KEY (id_chamado, id_contato),
     CONSTRAINT `fk_chamado_id` 
-        FOREIGN KEY (id_chamado) REFERENCES chamado_tec(id),
+        FOREIGN KEY (id_chamado) REFERENCES chamado(id),
     CONSTRAINT `fk_contato_id` 
         FOREIGN KEY (id_contato) REFERENCES contato(id)
 ) Engine=InnoDB;
