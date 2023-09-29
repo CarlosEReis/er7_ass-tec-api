@@ -8,7 +8,7 @@ import java.util.Stack;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "chamado_tec")
+@Table(name = "chamado")
 public class ChamadoTecnico {
 
     @Id
@@ -34,7 +34,7 @@ public class ChamadoTecnico {
         inverseJoinColumns = @JoinColumn(name = "id_contato"))
     private List<Contato> contatos = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chamaoTecnico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "chamadoTecnico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StatusChamadoObject> statusList = new Stack<>();
 
     public Integer getId() {

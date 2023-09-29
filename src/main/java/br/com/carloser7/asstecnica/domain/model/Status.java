@@ -14,7 +14,9 @@ public abstract class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "data")
     private LocalDateTime dataStatus;
+    @Column(name = "usuario")
     private String nomeUsuario;
 
     public Status() {}

@@ -14,6 +14,7 @@ public class StatusItemChamadoObject extends Status {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "id_item_chamado")
     private ItemChamadoTecnico itemChamado;
 
     public StatusItemChamadoObject(){}

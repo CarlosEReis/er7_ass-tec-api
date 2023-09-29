@@ -23,7 +23,7 @@ public class ItemChamadoTecnico {
     @JoinColumn(name = "id_chamado")
     private ChamadoTecnico chamadoTecnico;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemChamado")
     private List<StatusItemChamadoObject> status = new Stack<>();
 
     public Integer getId() {

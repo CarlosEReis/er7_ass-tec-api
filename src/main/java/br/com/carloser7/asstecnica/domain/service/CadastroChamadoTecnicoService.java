@@ -53,7 +53,7 @@ public class CadastroChamadoTecnicoService {
         status.setStatus(StatusChamadoTecnico.FILA);
         status.setDataStatus(LocalDateTime.now());
         status.setNomeUsuario(getUsuarioAtual().getNome());
-        status.setChamaoTecnico(chamado);
+        status.setchamadoTecnico(chamado);
 
         chamado.getStatusList().add(status);
 
@@ -71,98 +71,9 @@ public class CadastroChamadoTecnicoService {
             case FINALIZADO -> concluirAvaliacaoChamado(idChamado);
             default -> throw new AlteracaoStatusNaoPermitidaException("Não é possível atualizar o chamado para o status " + status);
         };
-    }
+   }
 
-    public Object alterarStatusItemChamado(Integer idChamado, Integer idItemChamado, StatusItemChamadoTecnico status) {
-        ChamadoTecnico chamado = buscar(idChamado);
-        ItemChamadoTecnico item = chamado.getItens().stream()
-            .filter(itemAtual -> idItemChamado.equals(itemAtual.getId()))
-            .findFirst()
-            .orElseThrow(() ->
-                    new ItemChamadoNaoEncontradoException(idItemChamado)
-            );
-
-        switch (status) {
-            case PENDENTE -> {
-                throw new AlteracaoStatusNaoPermitidaException(
-                        String.format("Item do chamado %s série %s, não pode ser alterado para o status %s, pois está em %s",
-                            item.getSku(), item.getSerial(), status, item.getUtlimoStatus()));
-            }
-            case AVALIANDO -> iniciarAvaliacaoItemChamado(item);
-            case AVALIADO -> {
-                item.getStatus().add(
-                    new StatusItemChamadoObject(
-                        LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + status);
-        };
-
-        this.chamadoRepository.save(chamado);
-
-        return null;
-    }
-
-    private void iniciarAvaliacaoItemChamado(ItemChamadoTecnico item) {
-        var ultimoStatus = item.getUtlimoStatus();
-
-        switch (ultimoStatus) {
-            case PENDENTE -> {
-                item.getStatus().add(
-                        new StatusItemChamadoObject(
-                                LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIANDO, item));
-            }
-            case AVALIANDO -> throw new AlteracaoStatusNaoPermitidaException(
-                    String.format("Item do chamado %s série %s, já está sendo avaliado.", item.getSku(), item.getSerial()));
-            case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
-                    String.format("Item do chamado %s série %s, já foi avaliado.", item.getSku(), item.getSerial()));
-            default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
-        }
-    }
-
-    private void concluirAvaliacaoItemChamado(ItemChamadoTecnico item) {
-        var ultimoStatus = item.getUtlimoStatus();
-
-        switch (ultimoStatus) {
-            case PENDENTE -> throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo ainda está com o status %s.",
-                    item.getSku(), item.getSerial(), ultimoStatus));
-            case AVALIANDO -> {
-                item.getStatus().add(
-                    new StatusItemChamadoObject(
-                        LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
-            }
-            case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo já está com o status %s.",
-                    item.getSku(), item.getSerial(), ultimoStatus));
-            default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
-
-    }
-
-    public ChamadoTecnico iniciarAvaliacaoChamado(Integer idChamado) {
-        ChamadoTecnico chamado = buscar(idChamado);
-        var ultimoStatus = chamado.getUltimoStatus();
-        
-        if (!ultimoStatus.equals(StatusChamadoTecnico.FILA)) {
-            throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Não é possível iniciar a avaliação de um chamado com o status %s.", ultimoStatus.getDescricao().toUpperCase())
-            );
-        }
-
-        chamado.setStatus(StatusChamadoTecnico.PROCESSANDO);
-
-        // TODO: Ponto de refatoracao
-        var status = new StatusChamadoObject();
-        status.setStatus(StatusChamadoTecnico.PROCESSANDO);
-        status.setDataStatus(LocalDateTime.now());
-        status.setNomeUsuario(getUsuarioAtual().getNome());
-        status.setChamaoTecnico(chamado);
-
-        chamado.getStatusList().add(status);
-
-        return this.chamadoRepository.save(chamado);
-    }
-
-    public ChamadoTecnico concluirAvaliacaoChamado(Integer idChamado) {
+    private ChamadoTecnico concluirAvaliacaoChamado(Integer idChamado) {
         // BUSCAR CHAMADO
         ChamadoTecnico chamado = buscar(idChamado);
 
@@ -170,13 +81,13 @@ public class CadastroChamadoTecnicoService {
         var ultimoStatus = chamado.getUltimoStatus();
         if (!ultimoStatus.equals(StatusChamadoTecnico.PROCESSANDO)) {
             throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Não é possível concluir um chamado com o status %s.", ultimoStatus.getDescricao().toUpperCase()));
+                    String.format("Não é possível concluir um chamado com o status %s.", ultimoStatus.getDescricao().toUpperCase()));
         }
 
         // VERIFICAR SE TODOS OS ITENS ESTÃO CONCLUÍDOS (AVALIADOS)
         // CASO NAO LANCAR EXCEPTION
         chamado.getItens().forEach( item -> {
-            if (!item.getStatus().equals(StatusItemChamadoTecnico.AVALIADO)) {
+            if (!item.getUtlimoStatus().equals(StatusItemChamadoTecnico.AVALIADO)) {
                 throw new AlteracaoStatusNaoPermitidaException(
                     String.format(
                         "Não é possível concluir o chamado. O item %s de série %s ainda não foi avaliado.",
@@ -191,17 +102,106 @@ public class CadastroChamadoTecnicoService {
         status.setDataStatus(LocalDateTime.now());
         status.setNomeUsuario(getUsuarioAtual().getNome());
 
-        status.setChamaoTecnico(chamado);
+        status.setchamadoTecnico(chamado);
 
         chamado.getStatusList().add(status);
 
         return this.chamadoRepository.save(chamado);
     }
 
-    public byte[] relatorioFichaChamadoTecnico(Integer idChamado) throws JRException {
+    private ChamadoTecnico iniciarAvaliacaoChamado(Integer idChamado) {
+        ChamadoTecnico chamado = buscar(idChamado);
+        var ultimoStatus = chamado.getUltimoStatus();
+
+        if (!ultimoStatus.equals(StatusChamadoTecnico.FILA)) {
+            throw new AlteracaoStatusNaoPermitidaException(
+                String.format("Não é possível iniciar a avaliação de um chamado com o status %s.", ultimoStatus.getDescricao().toUpperCase())
+            );
+        }
+
+        chamado.setStatus(StatusChamadoTecnico.PROCESSANDO);
+
+        // TODO: Ponto de refatoracao
+        var status = new StatusChamadoObject();
+        status.setStatus(StatusChamadoTecnico.PROCESSANDO);
+        status.setDataStatus(LocalDateTime.now());
+        status.setNomeUsuario(getUsuarioAtual().getNome());
+        status.setchamadoTecnico(chamado);
+
+        chamado.getStatusList().add(status);
+
+        return this.chamadoRepository.save(chamado);
+    }
+
+    public ChamadoTecnico alterarStatusItemChamado(Integer idChamado, Integer idItemChamado, StatusItemChamadoTecnico status) {
+        ChamadoTecnico chamado = buscar(idChamado);
+        ItemChamadoTecnico item = chamado.getItens().stream()
+            .filter(itemAtual -> idItemChamado.equals(itemAtual.getId()))
+            .findFirst()
+            .orElseThrow(() ->
+            new ItemChamadoNaoEncontradoException(idItemChamado)
+        );
+
+        switch (status) {
+            case PENDENTE ->
+                throw new AlteracaoStatusNaoPermitidaException(
+                    String.format("Item do chamado %s série %s, não pode ser alterado para o status %s, pois está em %s",
+                        item.getSku(), item.getSerial(), status, item.getUtlimoStatus()));
+            case AVALIANDO -> iniciarAvaliacaoItemChamado(item);
+            case AVALIADO -> concluirAvaliacaoItemChamado(item);
+            default -> throw new IllegalStateException("Unexpected value: " + status);
+        }
+
+        return this.chamadoRepository.save(chamado);
+    }
+
+    private void iniciarAvaliacaoItemChamado(ItemChamadoTecnico item) {
+        var ultimoStatus = item.getUtlimoStatus();
+
+        switch (ultimoStatus) {
+            case PENDENTE -> {
+                item.getStatus().add(
+                    new StatusItemChamadoObject(
+                        LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIANDO, item));
+
+                // TODO: Ao ininciar a avaliação de um item, se o chamado estiver como 'FILA' ele deve ir automaticamento para processando.
+            }
+            case AVALIANDO -> throw new AlteracaoStatusNaoPermitidaException(
+                String.format("Item do chamado %s série %s, já está sendo avaliado.", item.getSku(), item.getSerial()));
+
+            case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
+                String.format("Item do chamado %s série %s, já foi avaliado.", item.getSku(), item.getSerial()));
+
+            default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
+        }
+    }
+
+    private void concluirAvaliacaoItemChamado(ItemChamadoTecnico item) {
+        var ultimoStatus = item.getUtlimoStatus();
+
+        switch (ultimoStatus) {
+            case PENDENTE -> throw new AlteracaoStatusNaoPermitidaException(
+                String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo ainda está com o status %s.",
+                    item.getSku(), item.getSerial(), ultimoStatus));
+
+            case AVALIANDO ->
+                item.getStatus().add(
+                    new StatusItemChamadoObject(
+                        LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
+
+            case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
+                String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo já está com o status %s.",
+                    item.getSku(), item.getSerial(), ultimoStatus));
+
+            default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
+
+        }
+
+    }
+    public byte[] relatorioFichaChamadoTecnico (Integer idChamado) throws JRException {
         ChamadoTecnico chamadoTecnico = this.chamadoRepository
-                .findById(idChamado)
-                .orElseThrow(
+            .findById(idChamado)
+            .orElseThrow(
                 () -> new EmptyResultDataAccessException("Produto com o id " + idChamado + " não foi encontrado", 1));
 
         List<ChamadoTecnico> chamadoTecnicos = Collections.singletonList(chamadoTecnico);
@@ -217,8 +217,8 @@ public class CadastroChamadoTecnicoService {
         JRSaver.saveObject(JasperCompileManager.compileReport(ocorrencias), "ficha-chamado-ocorrencias-embed.jasper");
 
         JasperPrint jasperPrint = JasperFillManager
-                .fillReport(jasperReport, null, new JRBeanCollectionDataSource(chamadoTecnicos));
+            .fillReport(jasperReport, null, new JRBeanCollectionDataSource(chamadoTecnicos));
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
-
 }
+

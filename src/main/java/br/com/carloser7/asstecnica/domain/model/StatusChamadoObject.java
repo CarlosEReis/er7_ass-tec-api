@@ -12,7 +12,8 @@ public class StatusChamadoObject extends Status {
 
     @JsonIgnore
     @ManyToOne
-    private ChamadoTecnico chamaoTecnico;
+    @JoinColumn(name = "id_chamado")
+    private ChamadoTecnico chamadoTecnico;
 
     public StatusChamadoTecnico getStatus() {
         return status;
@@ -22,11 +23,11 @@ public class StatusChamadoObject extends Status {
         this.status = status;
     }
 
-    public ChamadoTecnico getChamaoTecnico() {
-        return chamaoTecnico;
+    public ChamadoTecnico getchamadoTecnico() {
+        return chamadoTecnico;
     }
 
-    public void setChamaoTecnico(ChamadoTecnico chamaoTecnico) {
-        this.chamaoTecnico = chamaoTecnico;
+    public void setchamadoTecnico(ChamadoTecnico chamadoTecnico) {
+        this.chamadoTecnico = chamadoTecnico;
     }
 }

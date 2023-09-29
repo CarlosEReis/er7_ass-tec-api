@@ -85,7 +85,7 @@ public class ChamadoTecnicoController {
     }
 
     @PostMapping("/{idChamado}/alteracao-status-item/{idItemChamado}")
-    public Object alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody StatusItemChamadoTecnico status) {
+    public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody StatusItemChamadoTecnico status) {
         return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, status);
     }
 
