@@ -9,10 +9,6 @@ public class RecursoCriadoEvent extends ApplicationEvent {
     private HttpServletResponse response;
     private Integer id;
 
-    public RecursoCriadoEvent(Object source) {
-        super(source);
-    }
-
     public RecursoCriadoEvent(Object source, HttpServletResponse response, Integer id) {
         super(source);
         this.id = id;
