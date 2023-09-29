@@ -1,8 +1,11 @@
 package br.com.carloser7.asstecnica.api.controller;
 
+import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.service.CadastroClienteService;
 import br.com.carloser7.asstecnica.domain.repository.projection.ClienteView;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,13 +33,16 @@ public class ClienteController {
     @Autowired
     private CadastroClienteService cadastroClienteService;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     @PostMapping
-    public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente) {
+    public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente, HttpServletResponse response) {
         cliente.getContatos().forEach(contato -> contato.setCliente(cliente));
         var clienteSalvo = this.clienteRepository.save(cliente);
+        this.publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
-
     @GetMapping
     public ResponseEntity<Page<ClienteView>> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
