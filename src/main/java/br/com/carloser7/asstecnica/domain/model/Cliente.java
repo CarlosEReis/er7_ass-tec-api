@@ -15,10 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +30,10 @@ public class Cliente {
     private Integer id;
 
     @NotBlank
-    @Size(min=5, max=40)
+    @Size(min=8, max=40)
     private String nome;
- 
-    @Size(min = 5, max = 20)
+
+    @Size(max = 20)
     private String fantasia;
     
     @NotBlank

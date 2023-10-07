@@ -87,7 +87,7 @@ public class CadastroChamadoTecnicoService {
         // VERIFICAR SE TODOS OS ITENS ESTÃO CONCLUÍDOS (AVALIADOS)
         // CASO NAO LANCAR EXCEPTION
         chamado.getItens().forEach( item -> {
-            if (!item.getUtlimoStatus().equals(StatusItemChamadoTecnico.AVALIADO)) {
+            if (!item.getUltimoStatus().equals(StatusItemChamadoTecnico.AVALIADO)) {
                 throw new AlteracaoStatusNaoPermitidaException(
                     String.format(
                         "Não é possível concluir o chamado. O item %s de série %s ainda não foi avaliado.",
@@ -146,7 +146,7 @@ public class CadastroChamadoTecnicoService {
             case PENDENTE ->
                 throw new AlteracaoStatusNaoPermitidaException(
                     String.format("Item do chamado %s série %s, não pode ser alterado para o status %s, pois está em %s",
-                        item.getSku(), item.getSerial(), status, item.getUtlimoStatus()));
+                        item.getSku(), item.getSerial(), status, item.getUltimoStatus()));
             case AVALIANDO -> iniciarAvaliacaoItemChamado(item);
             case AVALIADO -> concluirAvaliacaoItemChamado(item);
             default -> throw new IllegalStateException("Unexpected value: " + status);
@@ -156,7 +156,7 @@ public class CadastroChamadoTecnicoService {
     }
 
     private void iniciarAvaliacaoItemChamado(ItemChamadoTecnico item) {
-        var ultimoStatus = item.getUtlimoStatus();
+        var ultimoStatus = item.getUltimoStatus();
 
         switch (ultimoStatus) {
             case PENDENTE -> {
@@ -177,7 +177,7 @@ public class CadastroChamadoTecnicoService {
     }
 
     private void concluirAvaliacaoItemChamado(ItemChamadoTecnico item) {
-        var ultimoStatus = item.getUtlimoStatus();
+        var ultimoStatus = item.getUltimoStatus();
 
         switch (ultimoStatus) {
             case PENDENTE -> throw new AlteracaoStatusNaoPermitidaException(
