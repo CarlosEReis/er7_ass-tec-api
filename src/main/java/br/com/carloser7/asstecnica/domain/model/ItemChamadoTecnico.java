@@ -75,7 +75,7 @@ public class ItemChamadoTecnico {
     }
 
     @Transient
-    public StatusItemChamadoTecnico getUtlimoStatus() {
+    public StatusItemChamadoTecnico getUltimoStatus() {
         if (this.status.isEmpty()) {
             throw new IllegalStateException("Lista de status vazia.");
         }
