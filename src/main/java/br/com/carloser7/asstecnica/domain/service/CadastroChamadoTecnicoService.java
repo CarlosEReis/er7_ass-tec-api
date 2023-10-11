@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.domain.service;
 
+import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
 import br.com.carloser7.asstecnica.domain.exception.AlteracaoStatusNaoPermitidaException;
 import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.ItemChamadoNaoEncontradoException;
@@ -133,7 +134,10 @@ public class CadastroChamadoTecnicoService {
         return this.chamadoRepository.save(chamado);
     }
 
-    public ChamadoTecnico alterarStatusItemChamado(Integer idChamado, Integer idItemChamado, StatusItemChamadoTecnico status) {
+    public ChamadoTecnico alterarStatusItemChamado(Integer idChamado, Integer idItemChamado, ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
+        var status = concluiAvaliacao.getStatus();
+        var posicaoTecnica = concluiAvaliacao.getPosicaoTecnica();
+
         ChamadoTecnico chamado = buscar(idChamado);
         ItemChamadoTecnico item = chamado.getItens().stream()
             .filter(itemAtual -> idItemChamado.equals(itemAtual.getId()))
@@ -148,7 +152,7 @@ public class CadastroChamadoTecnicoService {
                     String.format("Item do chamado %s série %s, não pode ser alterado para o status %s, pois está em %s",
                         item.getSku(), item.getSerial(), status, item.getUltimoStatus()));
             case AVALIANDO -> iniciarAvaliacaoItemChamado(item);
-            case AVALIADO -> concluirAvaliacaoItemChamado(item);
+            case AVALIADO -> concluirAvaliacaoItemChamado(item, posicaoTecnica);
             default -> throw new IllegalStateException("Unexpected value: " + status);
         }
 
@@ -157,6 +161,23 @@ public class CadastroChamadoTecnicoService {
 
     private void iniciarAvaliacaoItemChamado(ItemChamadoTecnico item) {
         var ultimoStatus = item.getUltimoStatus();
+
+        //System.out.println("\n\nALTERAR O CHAMADO PARA PROCESSANDO\t\n\n\n"+item.getChamadoTecnico().getId());
+        //iniciarAvaliacaoChamado(item.getChamadoTecnico().getId());
+        var idChamado = item.getChamadoTecnico().getId();
+        ChamadoTecnico chamado = buscar(idChamado);
+        if (chamado.getUltimoStatus().equals(StatusChamadoTecnico.FILA)){
+            chamado.setStatus(StatusChamadoTecnico.PROCESSANDO);
+
+            // TODO: Ponto de refatoracao
+            var status = new StatusChamadoObject();
+            status.setStatus(StatusChamadoTecnico.PROCESSANDO);
+            status.setDataStatus(LocalDateTime.now());
+            status.setNomeUsuario(getUsuarioAtual().getNome());
+            status.setchamadoTecnico(chamado);
+
+            chamado.getStatusList().add(status);
+        }
 
         switch (ultimoStatus) {
             case PENDENTE -> {
@@ -176,7 +197,7 @@ public class CadastroChamadoTecnicoService {
         }
     }
 
-    private void concluirAvaliacaoItemChamado(ItemChamadoTecnico item) {
+    private void concluirAvaliacaoItemChamado(ItemChamadoTecnico item, String posicaoTecnica) {
         var ultimoStatus = item.getUltimoStatus();
 
         switch (ultimoStatus) {
@@ -184,11 +205,12 @@ public class CadastroChamadoTecnicoService {
                 String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo ainda está com o status %s.",
                     item.getSku(), item.getSerial(), ultimoStatus));
 
-            case AVALIANDO ->
+            case AVALIANDO -> {
                 item.getStatus().add(
-                    new StatusItemChamadoObject(
-                        LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
-
+                        new StatusItemChamadoObject(
+                                LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
+                item.setPosicaoTecnica(posicaoTecnica);
+            }
             case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
                 String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo já está com o status %s.",
                     item.getSku(), item.getSerial(), ultimoStatus));

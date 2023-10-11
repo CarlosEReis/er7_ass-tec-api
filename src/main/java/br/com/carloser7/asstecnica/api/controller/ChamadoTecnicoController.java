@@ -1,6 +1,7 @@
 package br.com.carloser7.asstecnica.api.controller;
 
 import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
+import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
 import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
@@ -96,10 +97,15 @@ public class ChamadoTecnicoController {
         return this.cadastroChamadoTecnicoService.alterarStatusChamado(idChamado, status);
     }
 
-    @PostMapping("/{idChamado}/alteracao-status-item/{idItemChamado}")
-    public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody StatusItemChamadoTecnico status) {
-        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, status);
+    @PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
+    public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
+        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
     }
+
+    /**@PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
+    public ChamadoTecnico concluiAvaliacaoItemChamado(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
+        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
+    }**/
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
         var chamadoTecnico = new ChamadoTecnico();
