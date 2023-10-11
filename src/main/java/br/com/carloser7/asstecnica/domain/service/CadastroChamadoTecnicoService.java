@@ -1,6 +1,7 @@
 package br.com.carloser7.asstecnica.domain.service;
 
 import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
+import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
 import br.com.carloser7.asstecnica.domain.exception.AlteracaoStatusNaoPermitidaException;
 import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.ItemChamadoNaoEncontradoException;
@@ -210,6 +211,7 @@ public class CadastroChamadoTecnicoService {
                         new StatusItemChamadoObject(
                                 LocalDateTime.now(), getUsuarioAtual().getNome(), StatusItemChamadoTecnico.AVALIADO, item));
                 item.setPosicaoTecnica(posicaoTecnica);
+                concluirChamado(item.getChamadoTecnico().getId());
             }
             case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
                 String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo já está com o status %s.",
@@ -220,6 +222,34 @@ public class CadastroChamadoTecnicoService {
         }
 
     }
+
+    private void concluirChamado(Integer idChamado) {
+        var chamado = buscar(idChamado);
+
+        if (todosItensAvaliados(chamado.getItens())) {
+            chamado.setStatus(StatusChamadoTecnico.FINALIZADO);
+
+            var status = new StatusChamadoObject();
+            status.setStatus(StatusChamadoTecnico.FINALIZADO);
+            status.setDataStatus(LocalDateTime.now());
+            status.setNomeUsuario(getUsuarioAtual().getNome());
+            status.setchamadoTecnico(chamado);
+
+            chamado.getStatusList().add(status);
+        }
+    }
+
+    private boolean todosItensAvaliados(List<ItemChamadoTecnico> itens) {
+        var avaliados = true;
+        for (ItemChamadoTecnico item : itens) {
+            if (!item.getUltimoStatus().equals(StatusItemChamadoTecnico.AVALIADO)) {
+                avaliados = false;
+                break;
+            }
+        }
+        return avaliados;
+    }
+
     public byte[] relatorioFichaChamadoTecnico (Integer idChamado) throws JRException {
         ChamadoTecnico chamadoTecnico = this.chamadoRepository
             .findById(idChamado)
