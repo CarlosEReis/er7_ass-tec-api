@@ -18,6 +18,9 @@ public class ItemChamadoTecnico {
     private String serial;
     private String descricao;
 
+    @Column(name = "posi_tecn")
+    private String posicaoTecnica;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_chamado")
@@ -72,6 +75,14 @@ public class ItemChamadoTecnico {
 
     public void setStatus(List<StatusItemChamadoObject> status) {
         this.status = status;
+    }
+
+    public String getPosicaoTecnica() {
+        return posicaoTecnica;
+    }
+
+    public void setPosicaoTecnica(String posicaoTecnica) {
+        this.posicaoTecnica = posicaoTecnica;
     }
 
     @Transient
