@@ -7,6 +7,7 @@ import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoE
 import br.com.carloser7.asstecnica.domain.exception.ItemChamadoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.model.*;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
+import br.com.carloser7.asstecnica.domain.repository.ClienteRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRSaver;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +28,12 @@ public class CadastroChamadoTecnicoService {
 
     @Autowired
     private ChamadoTecnicoRepository chamadoRepository;
+
+    @Autowired
+    private CadastroClienteService clienteService;
+
+    @Autowired
+    private CadastroContatoService contatoService;
 
     public ChamadoTecnico buscar(Integer chamadoId) {
         return this.chamadoRepository
@@ -49,6 +57,14 @@ public class CadastroChamadoTecnicoService {
         });
 
         chamado.setStatus(StatusChamadoTecnico.FILA);
+        chamado.setCliente(
+            this.clienteService.buscar(chamado.getCliente().getId())
+        );
+        List<Contato> contatos = new ArrayList<>();
+        for (Contato contato : chamado.getContatos()) {
+            contatos.add( this.contatoService.buscar(contato.getId()) );
+        }
+        chamado.setContatos(contatos);
 
         // TODO: Ponto de refatoracao
         var status = new StatusChamadoObject();
@@ -250,13 +266,13 @@ public class CadastroChamadoTecnicoService {
         return avaliados;
     }
 
-    public byte[] relatorioFichaChamadoTecnico (Integer idChamado) throws JRException {
-        ChamadoTecnico chamadoTecnico = this.chamadoRepository
-            .findById(idChamado)
-            .orElseThrow(
-                () -> new EmptyResultDataAccessException("Produto com o id " + idChamado + " não foi encontrado", 1));
+    public byte[] geraFichaChamdo(Integer chamadoId) throws JRException {
+        ChamadoTecnico chamadoTecnico = this.buscar(chamadoId);
+        return this.relatorioFichaChamadoTecnico(chamadoTecnico);
+    }
 
-        List<ChamadoTecnico> chamadoTecnicos = Collections.singletonList(chamadoTecnico);
+    public  byte[] relatorioFichaChamadoTecnico (ChamadoTecnico chamado) throws JRException {
+        List<ChamadoTecnico> chamadoTecnicos = Collections.singletonList(chamado);
 
         InputStream fichaChamado = getClass().getResourceAsStream("/relatorios/ficha-chamado.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(fichaChamado);

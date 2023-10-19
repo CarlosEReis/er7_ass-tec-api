@@ -8,8 +8,8 @@ import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.model.*;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
-import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
 import br.com.carloser7.asstecnica.domain.repository.projection.ChamadoTecnicoView;
+import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
@@ -24,7 +24,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -86,7 +85,7 @@ public class ChamadoTecnicoController {
 
     @GetMapping("/{idChamado}/ficha")
     public ResponseEntity<byte[]> fichaChamadoTecnicoPDF(@PathVariable Integer idChamado) throws JRException {
-        byte[] ficha = this.cadastroChamadoTecnicoService.relatorioFichaChamadoTecnico(idChamado);
+        byte[] ficha = this.cadastroChamadoTecnicoService.geraFichaChamdo(idChamado);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }
