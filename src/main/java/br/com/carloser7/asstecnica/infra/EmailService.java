@@ -44,5 +44,20 @@ public class EmailService {
         }
     }
 
+    public void enviarEmail(String remetente, List<String> destinatarios, String assunto, String mensagem) {
+        try {
+            MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            helper.setFrom(remetente);
+            helper.setTo(destinatarios.toArray(new String[destinatarios.size()]));
+            helper.setSubject(assunto);
+            helper.setText(mensagem, true);
+
+            mailSender.send(mimeMessage);
+            System.out.println("\n\nE-MAIL ENVIADO COM SUCESSO\n\n");
+        } catch (MessagingException e) {
+            throw new RuntimeException("Problemas com o envio de e-mail", e);
+        }
+    }
 
 }
