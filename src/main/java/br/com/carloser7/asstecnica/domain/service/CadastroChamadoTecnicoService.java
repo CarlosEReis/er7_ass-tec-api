@@ -2,6 +2,8 @@ package br.com.carloser7.asstecnica.domain.service;
 
 import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
+import br.com.carloser7.asstecnica.domain.event.ChamadoConcluidoEvent;
+import br.com.carloser7.asstecnica.domain.event.ChamadoProcessandoEvent;
 import br.com.carloser7.asstecnica.domain.exception.AlteracaoStatusNaoPermitidaException;
 import br.com.carloser7.asstecnica.domain.exception.ChamadoTecnicoNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.ItemChamadoNaoEncontradoException;
@@ -12,6 +14,7 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRSaver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +37,9 @@ public class CadastroChamadoTecnicoService {
 
     @Autowired
     private CadastroContatoService contatoService;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     public ChamadoTecnico buscar(Integer chamadoId) {
         return this.chamadoRepository
@@ -194,6 +200,8 @@ public class CadastroChamadoTecnicoService {
             status.setchamadoTecnico(chamado);
 
             chamado.getStatusList().add(status);
+
+            this.eventPublisher.publishEvent(new ChamadoProcessandoEvent(this, chamado));
         }
 
         switch (ultimoStatus) {
@@ -252,6 +260,8 @@ public class CadastroChamadoTecnicoService {
             status.setchamadoTecnico(chamado);
 
             chamado.getStatusList().add(status);
+
+            this.eventPublisher.publishEvent(new ChamadoConcluidoEvent(this,chamado));
         }
     }
 
