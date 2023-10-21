@@ -11,4 +11,5 @@ import br.com.carloser7.asstecnica.domain.model.Produto;
 public interface ProdutoRepository extends JpaRepository <Produto, Integer>{
     
     List<Produto> findBySku(String sku);
+    List<Produto> findBySkuContaining(String sku);
 }
