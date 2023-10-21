@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS contato (
 ) ENGINE=InnoDB;
 
 INSERT INTO contato (nome, email, telefone, departamento, id_cliente) VALUES 
-('Lucinea Rubi Bravo', 'lucinea.bravo@geradornv.com.br', '(61) 98128-2645', 'Engenharia', 1),
-('Antonieta Barboza Folly', 'antonieta.folly@geradornv.com.br', '(77) 99119-0867', 'Engenharia', 1);
+('Lucinea Rubi Bravo', 'lucinea.bravo@geradornv.com.br', '61981282645', 'Engenharia', 1),
+('Antonieta Barboza Folly', 'antonieta.folly@geradornv.com.br', '77991190867', 'Engenharia', 1);
