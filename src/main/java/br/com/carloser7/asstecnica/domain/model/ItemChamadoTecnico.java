@@ -14,12 +14,15 @@ public class ItemChamadoTecnico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String sku;
     private String serial;
     private String descricao;
 
     @Column(name = "posi_tecn")
     private String posicaoTecnica;
+
+    @ManyToOne
+    @JoinColumn(name = "id_produto")
+    private Produto produto = new Produto();
 
     @JsonIgnore
     @ManyToOne
@@ -37,12 +40,10 @@ public class ItemChamadoTecnico {
         this.id = id;
     }
 
+    //TODO: Ajutar a geracao da ficha de chamado tecnico, para pegar o sku atraves do produto e remover o metodo abaixo
+    @Transient
     public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
+        return this.getProduto().getSku();
     }
 
     public String getSerial() {
@@ -61,6 +62,22 @@ public class ItemChamadoTecnico {
         this.descricao = descricao;
     }
 
+    public String getPosicaoTecnica() {
+        return posicaoTecnica;
+    }
+
+    public void setPosicaoTecnica(String posicaoTecnica) {
+        this.posicaoTecnica = posicaoTecnica;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
     public ChamadoTecnico getChamadoTecnico() {
         return chamadoTecnico;
     }
@@ -75,14 +92,6 @@ public class ItemChamadoTecnico {
 
     public void setStatus(List<StatusItemChamadoObject> status) {
         this.status = status;
-    }
-
-    public String getPosicaoTecnica() {
-        return posicaoTecnica;
-    }
-
-    public void setPosicaoTecnica(String posicaoTecnica) {
-        this.posicaoTecnica = posicaoTecnica;
     }
 
     @Transient

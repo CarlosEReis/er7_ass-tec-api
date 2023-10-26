@@ -139,7 +139,8 @@ public class ChamadoTecnicoController {
     private ItemChamadoTecnico toDomainObject(ItemChamadoInput input) {
         var itemChamado = new ItemChamadoTecnico();
         itemChamado.setId(input.getId());
-        itemChamado.setSku(input.getSku());
+
+        itemChamado.getProduto().setId(input.getProduto().getId());
         itemChamado.setSerial(input.getSerial());
         itemChamado.setDescricao(input.getDescricao());
         return itemChamado;

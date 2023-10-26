@@ -115,7 +115,7 @@ public class CadastroChamadoTecnicoService {
                 throw new AlteracaoStatusNaoPermitidaException(
                     String.format(
                         "Não é possível concluir o chamado. O item %s de série %s ainda não foi avaliado.",
-                        item.getSku(), item.getSerial())
+                        item.getProduto().getSku(), item.getSerial())
                 );
             }
         });
@@ -173,7 +173,7 @@ public class CadastroChamadoTecnicoService {
             case PENDENTE ->
                 throw new AlteracaoStatusNaoPermitidaException(
                     String.format("Item do chamado %s série %s, não pode ser alterado para o status %s, pois está em %s",
-                        item.getSku(), item.getSerial(), status, item.getUltimoStatus()));
+                        item.getProduto().getSku(), item.getSerial(), status, item.getUltimoStatus()));
             case AVALIANDO -> iniciarAvaliacaoItemChamado(item);
             case AVALIADO -> concluirAvaliacaoItemChamado(item, posicaoTecnica);
             default -> throw new IllegalStateException("Unexpected value: " + status);
@@ -213,10 +213,10 @@ public class CadastroChamadoTecnicoService {
                 // TODO: Ao ininciar a avaliação de um item, se o chamado estiver como 'FILA' ele deve ir automaticamento para processando.
             }
             case AVALIANDO -> throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Item do chamado %s série %s, já está sendo avaliado.", item.getSku(), item.getSerial()));
+                String.format("Item do chamado %s série %s, já está sendo avaliado.", item.getProduto().getSku(), item.getSerial()));
 
             case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
-                String.format("Item do chamado %s série %s, já foi avaliado.", item.getSku(), item.getSerial()));
+                String.format("Item do chamado %s série %s, já foi avaliado.", item.getProduto().getSku(), item.getSerial()));
 
             default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
         }
@@ -228,7 +228,7 @@ public class CadastroChamadoTecnicoService {
         switch (ultimoStatus) {
             case PENDENTE -> throw new AlteracaoStatusNaoPermitidaException(
                 String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo ainda está com o status %s.",
-                    item.getSku(), item.getSerial(), ultimoStatus));
+                    item.getProduto().getSku(), item.getSerial(), ultimoStatus));
 
             case AVALIANDO -> {
                 item.getStatus().add(
@@ -239,7 +239,7 @@ public class CadastroChamadoTecnicoService {
             }
             case AVALIADO -> throw new AlteracaoStatusNaoPermitidaException(
                 String.format("Não é possível concluir avaliação do item %s serie %s. O mesmo já está com o status %s.",
-                    item.getSku(), item.getSerial(), ultimoStatus));
+                    item.getProduto().getSku(), item.getSerial(), ultimoStatus));
 
             default -> throw new AlteracaoStatusNaoPermitidaException("Alteração de status inválida.");
 

@@ -6,7 +6,8 @@ public class ItemChamadoInput {
     private String sku;
     private String serial;
     private String descricao;
-
+    private ProdutoInput produto = new ProdutoInput();
+    
     public Integer getId() {
         return id;
     }
@@ -39,6 +40,14 @@ public class ItemChamadoInput {
         this.descricao = descricao;
     }
 
+    public ProdutoInput getProduto() {
+        return produto;
+    }
+
+    public void setProduto(ProdutoInput produto) {
+        this.produto = produto;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -64,4 +73,15 @@ public class ItemChamadoInput {
         return true;
     }
 
+    public class ProdutoInput {
+        private Integer id;
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+    }
 }
