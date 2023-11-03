@@ -4,6 +4,7 @@ import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.KpisPrincipal;
 import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.model.*;
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -99,6 +101,31 @@ public class ChamadoTecnicoController {
     @PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
     public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
         return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
+    }
+
+    @GetMapping("/estatisticas/kpis-principal")
+    public List<KpisPrincipal> kpisPrincipais() {
+        return this.chamadoTecnicoRepository.kpisPrincipais();
+    }
+
+    @GetMapping("/estatisticas/top4-produtos")
+    public List<?> top4ProdutosComDefeito() {
+        return this.chamadoTecnicoRepository.top4ProdutoDefeito();
+    }
+
+    @GetMapping("/estatisticas/top3-clientes")
+    public List<?> top3ClienteComMaisChamados() {
+        return this.chamadoTecnicoRepository.top3ClienteComMaisChamados();
+    }
+
+    @GetMapping("/estatisticas/top3-tecnicos")
+    public List<?> top3TecnicosMaisFinalizaraChamados() {
+        return this.chamadoTecnicoRepository.top3TecnicosMaisFinalizaraChamados();
+    }
+
+    @GetMapping("/estatisticas/status-chamado-pordia")
+    public List<?> statusChamadosPorDia() {
+        return this.chamadoTecnicoRepository.statusChamadosPorDia();
     }
 
     /**@PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
