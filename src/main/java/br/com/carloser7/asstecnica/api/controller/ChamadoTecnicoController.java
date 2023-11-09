@@ -128,6 +128,16 @@ public class ChamadoTecnicoController {
         return this.chamadoTecnicoRepository.statusChamadosPorDia();
     }
 
+    @GetMapping("/estatisticas/status-chamado-pormes")
+    public List<?> statusChamadosPorMes() {
+        return this.chamadoTecnicoRepository.statusChamadosPorMes();
+    }
+
+    @GetMapping("/estatisticas/itens-avaliados")
+    public KpisPrincipal qtdeItensAvaliados() {
+        return this.chamadoTecnicoRepository.qtdeDeItensAvaliados();
+    }
+
     /**@PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
     public ChamadoTecnico concluiAvaliacaoItemChamado(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
         return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);

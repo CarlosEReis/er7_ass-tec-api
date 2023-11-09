@@ -82,4 +82,43 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
          MONTH(st.data) = MONTH(CURRENT_DATE())
        GROUP BY DATE(st.data), st.status""", nativeQuery = true)
     List<StatusChamadoDia> statusChamadosPorDia();
+
+    @Query(value = """
+        WITH Meses AS (
+          SELECT 1 AS mes
+          UNION ALL SELECT 2
+          UNION ALL SELECT 3
+          UNION ALL SELECT 4
+          UNION ALL SELECT 5
+          UNION ALL SELECT 6
+          UNION ALL SELECT 7
+          UNION ALL SELECT 8
+          UNION ALL SELECT 9
+          UNION ALL SELECT 10
+          UNION ALL SELECT 11
+          UNION ALL SELECT 12
+        )
+
+        SELECT
+            m.mes,
+            status.status AS status,
+            COUNT(CASE WHEN MONTH(st.data) = m.mes AND st.status = status.status THEN 1 ELSE null END) AS quantidade
+        FROM Meses m
+        CROSS JOIN (SELECT 'FILA' AS status UNION ALL SELECT 'FINALIZADO') status
+        LEFT JOIN status st ON month(st.data) = m.mes AND YEAR(st.data) = YEAR(CURRENT_DATE())
+        GROUP
+            BY m.mes,
+            status.status""", nativeQuery = true)
+    List<StatusChamadoMes> statusChamadosPorMes();
+
+    @Query(value = """
+        SELECT
+          st.status,
+          COUNT(oc.id_chamado) as quantidade
+        FROM status st
+          LEFT JOIN ocorrencia_ct oc ON st.id_item_chamado = oc.id
+        WHERE
+          st.status = 'AVALIADO'
+        GROUP BY st.status""", nativeQuery = true)
+    KpisPrincipal qtdeDeItensAvaliados();
 }
