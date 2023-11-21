@@ -28,8 +28,9 @@ public class ChamadoCriadoListener  {
     public void aoCriarNovoChamadoTecnico(ChamadoCriadoEvent event) throws JRException {
 
         var id = event.getChamado().getId();
-        var cliente = event.getChamado().getCliente().getNome();
-        var contatos = getContatosEmail(event.getChamado().getContatos());
+        var chamado = this.chamadoTecnicoService.buscar(id);
+        var cliente = chamado.getCliente().getNome();
+        var contatos = getContatosEmail(chamado.getContatos());
         var mensagem = """
                 Olá,<br>
                 <br>
@@ -49,7 +50,7 @@ public class ChamadoCriadoListener  {
                 .formatted(id, cliente);
 
         var assunto = "ER7 Sistemas \uD83D\uDFE0: Chamado %s ABERTO".formatted(id);
-        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(event.getChamado());
+        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(chamado);
 
         this.emailService.enviarEmailComAnexo(
                 "carlos.er7@hotmail.com",

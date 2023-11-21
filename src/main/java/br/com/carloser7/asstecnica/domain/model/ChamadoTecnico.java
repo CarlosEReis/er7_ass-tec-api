@@ -25,7 +25,7 @@ public class ChamadoTecnico {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @OneToMany(mappedBy="chamadoTecnico", cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="chamadoTecnico", cascade = CascadeType.ALL, orphanRemoval = true )
     private List<ItemChamadoTecnico> itens = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
