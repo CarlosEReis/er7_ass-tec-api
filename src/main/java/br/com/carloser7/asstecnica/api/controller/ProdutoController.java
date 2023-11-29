@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public List<Produto> listar(@RequestParam(required = false) String sku) {
         if (StringUtils.hasText(sku)) {
             return this.produtoRepository.findBySkuContaining(sku);
@@ -29,12 +31,14 @@ public class ProdutoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
     public ResponseEntity<Produto> criar(@RequestBody Produto produto) {
         Produto produtoSalvo = this.produtoRepository.save(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
     public Produto atualizar(@PathVariable Integer id, @RequestBody Produto produto) {
         Produto produdoBanco = this.produtoRepository
             .findById(id)
