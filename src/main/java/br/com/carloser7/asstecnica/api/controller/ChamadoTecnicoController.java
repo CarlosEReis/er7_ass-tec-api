@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class ChamadoTecnicoController {
     private ApplicationEventPublisher publisher;
 
     @GetMapping()
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<Page<ChamadoTecnicoView>> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
             return ResponseEntity.ok(
@@ -52,12 +54,14 @@ public class ChamadoTecnicoController {
     }
 
     @GetMapping("/{chamadoId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<ChamadoTecnico> buscarPorId(@PathVariable Integer chamadoId) {
         var chamadoTecnico = cadastroChamadoTecnicoService.buscar(chamadoId);
         return ResponseEntity.ok(chamadoTecnico);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
     public ChamadoTecnico criar(@RequestBody @Valid ChamadoInput chamadoInput, HttpServletResponse response) {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
         ChamadoTecnico chamado = this.cadastroChamadoTecnicoService.criar(chamadoTecnico);
@@ -69,6 +73,7 @@ public class ChamadoTecnicoController {
     }
 
     @PutMapping("/{chamadoId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
     public ChamadoTecnico atualizar(@PathVariable Integer chamadoId, @RequestBody ChamadoInput chamadoInput) {
 
         Optional<ChamadoTecnico> chamadoBanco = this.chamadoTecnicoRepository.findById(chamadoId);
@@ -86,19 +91,15 @@ public class ChamadoTecnicoController {
     }
 
     @GetMapping("/{idChamado}/ficha")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<byte[]> fichaChamadoTecnicoPDF(@PathVariable Integer idChamado) throws JRException {
         byte[] ficha = this.cadastroChamadoTecnicoService.geraFichaChamdo(idChamado);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }
 
-    // REFATORAÇÃO DA ALTERAÇÃO DE STATUS
-    @PostMapping("/{idChamado}/alteracao-status")
-    public ChamadoTecnico alteracaoStatusChamado(@PathVariable Integer idChamado, @RequestBody StatusChamadoTecnico status) {
-        return this.cadastroChamadoTecnicoService.alterarStatusChamado(idChamado, status);
-    }
-
     @PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
         return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
     }
@@ -137,11 +138,6 @@ public class ChamadoTecnicoController {
     public KpisPrincipal qtdeItensAvaliados() {
         return this.chamadoTecnicoRepository.qtdeDeItensAvaliados();
     }
-
-    /**@PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
-    public ChamadoTecnico concluiAvaliacaoItemChamado(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
-        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
-    }**/
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
         var chamadoTecnico = new ChamadoTecnico();
