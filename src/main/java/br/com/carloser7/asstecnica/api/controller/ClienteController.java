@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,7 @@ public class ClienteController {
     private ApplicationEventPublisher publisher;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_GESTOR')")
     public ResponseEntity<Cliente> adicionar(@RequestBody @Valid Cliente cliente, HttpServletResponse response) {
         cliente.getContatos().forEach(contato -> contato.setCliente(cliente));
         var clienteSalvo = this.clienteRepository.save(cliente);
@@ -44,6 +46,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<Page<ClienteView>> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
             return ResponseEntity.ok(this.clienteRepository.findByNomeContaining(nome, pageable));
@@ -52,12 +55,14 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id) {
         var cliente = cadastroClienteService.buscar(id);
         return ResponseEntity.ok(cliente);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Object> deletar(@PathVariable Integer id) {
         var cliente = this.clienteRepository.findById(id);
         if (cliente.isEmpty()) {
