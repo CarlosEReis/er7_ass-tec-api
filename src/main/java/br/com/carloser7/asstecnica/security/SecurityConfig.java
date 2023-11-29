@@ -33,9 +33,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                 auth -> auth
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                    /*.requestMatchers(HttpMethod.POST, "/usuarios").hasRole("WRITE")*/
+                    /*.requestMatchers(HttpMethod.POST, "/usuarios").hasRole("WRITE")
                     .requestMatchers(HttpMethod.POST ,"/clientes").hasRole("WRITE")
-                    .requestMatchers(HttpMethod.GET ,"/clientes").hasRole("READ")
+                    .requestMatchers(HttpMethod.GET ,"/clientes").hasRole("READ")*/
                     .anyRequest().authenticated()
             )
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
