@@ -25,7 +25,7 @@ public class EmailService {
         System.out.println("Envio de e-mail terminado....");
     }*/
 
-    public void enviarEmailComAnexo(String remetente, List<String> destinatarios, String assunto, String mensagem, byte[] anexo) {
+    public void enviarEmailComAnexo(String remetente, List<String> destinatarios, String assunto, String mensagem, String nomeAxexo, byte[] anexo) {
         try {
             MimeMessage mimeMessage = this.mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -35,7 +35,7 @@ public class EmailService {
             helper.setText(mensagem, true);
 
             DataSource dataSource = new ByteArrayDataSource(anexo, "application/pdf");
-            helper.addAttachment("teste", dataSource);
+            helper.addAttachment(nomeAxexo, dataSource);
 
             mailSender.send(mimeMessage);
             System.out.println("\n\nE-MAIL ENVIADO COM SUCESSO\n\n");

@@ -12,6 +12,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -50,6 +52,8 @@ public class ChamadoCriadoListener  {
                 .formatted(id, cliente);
 
         var assunto = "ER7 Sistemas \uD83D\uDFE0: Chamado %s ABERTO".formatted(id);
+        var nomeAnexo = chamado.getId().toString().concat("_").concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddkkmm"))).concat(".pdf");
+        String concat = LocalDateTime.now().toString();
         var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(chamado);
 
         this.emailService.enviarEmailComAnexo(
@@ -57,6 +61,7 @@ public class ChamadoCriadoListener  {
                 contatos,
                 assunto,
                 mensagem,
+                nomeAnexo,
                 fichaTecnica );
     }
 
@@ -112,9 +117,10 @@ public class ChamadoCriadoListener  {
                 """
                 .formatted(id, cliente);
 
-        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(event.getChamado());
 
-        this.emailService.enviarEmailComAnexo("carlos.er7@hotmail.com", contatos, assunto, mensagem, fichaTecnica);
+        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(event.getChamado());
+        var nomeAnexo = event.getChamado().getId().toString().concat("_").concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddkkmm"))).concat(".pdf");
+        this.emailService.enviarEmailComAnexo("carlos.er7@hotmail.com", contatos, assunto, mensagem, nomeAnexo, fichaTecnica);
     }
 
     private static List<String> getContatosEmail(List<Contato> contatos) {
