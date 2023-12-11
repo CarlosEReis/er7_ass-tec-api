@@ -1,10 +1,14 @@
 package br.com.carloser7.asstecnica.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +27,18 @@ public class ProdutoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
-    public List<Produto> listar(@RequestParam(required = false) String sku) {
-        if (StringUtils.hasText(sku)) {
-            return this.produtoRepository.findBySkuContaining(sku);
-        }
-        return this.produtoRepository.findAll();
+    public ResponseEntity<Page<Produto>> listar(@RequestParam(required = false) String search, Pageable pageable) {
+       // if (StringUtils.hasText(sku)) {
+            var result = this.produtoRepository.findBySkuContainingOrNomeContaining(search, search, pageable);
+        //}
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
+    public ResponseEntity<Produto> buscarPorId(@PathVariable Integer id) {
+        Optional<Produto> produto = this.produtoRepository.findById(id);
+        return produto.isPresent() ? ResponseEntity.ok(produto.get()) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -48,4 +59,5 @@ public class ProdutoController {
         BeanUtils.copyProperties(produto, produdoBanco, "id");
         return this.produtoRepository.save(produdoBanco);
     }
+
 }
