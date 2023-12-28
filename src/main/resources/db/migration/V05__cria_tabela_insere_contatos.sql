@@ -7,7 +7,3 @@ CREATE TABLE IF NOT EXISTS contato (
     id_cliente INT NOT NULL,
     FOREIGN key(id_cliente) REFERENCES cliente(id)
 ) ENGINE=InnoDB;
-
-INSERT INTO contato (nome, email, telefone, departamento, id_cliente) VALUES 
-('Lucinea Rubi Bravo', 'lucinea.bravo@geradornv.com.br', '61981282645', 'Engenharia', 1),
-('Antonieta Barboza Folly', 'antonieta.folly@geradornv.com.br', '77991190867', 'Engenharia', 1);
