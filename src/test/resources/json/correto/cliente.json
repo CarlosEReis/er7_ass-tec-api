@@ -1,0 +1,30 @@
+{
+  "nome": "er7 Sistemas",
+  "fantasia": "er7 Sistemas",
+  "tipoPessoa": "JURIDICA",
+  "documento": "53460688000159",
+  "tipoCliente": "F",
+  "inscricaoEstadual": null,
+  "contribuinte": null,
+  "tabelaPreco": null,
+  "email": "contato@er7sistemas.com",
+  "telefone": "3228872256",
+  "endereco": {
+    "cep": "01001000",
+    "logradouro": "Praça da Sé",
+    "numero": "01",
+    "complemento": null,
+    "bairro": "Sé",
+    "cidade": "São Paulo",
+    "estado": "SP"
+  },
+  "contatos": [
+    {
+      "nome": "Carlos Reis",
+      "email": "carlos.reis@er7sistemas.com",
+      "telefone": "(32) 2887-2256",
+      "departamento": "Sistemas",
+      "acoes": "editar"
+    }
+  ]
+}
