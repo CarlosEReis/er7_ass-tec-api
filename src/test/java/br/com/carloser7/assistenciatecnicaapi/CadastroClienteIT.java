@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {Application.class, DatabaseCleaner.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 class CadastroClienteIT {
 
 	@LocalServerPort
@@ -31,7 +33,7 @@ class CadastroClienteIT {
 		RestAssured.basePath = "/clientes";
 		RestAssured.port = port;
 
-		databaseCleaner.clearTables();
+		//databaseCleaner.clearTables();
 
 		jsonClienteCorreto = ResourceUtils.getContentFromResource("/json/correto/cliente.json");
 		geraToken();
@@ -47,25 +49,25 @@ class CadastroClienteIT {
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.CREATED.value());
-	}
+		.statusCode(HttpStatus.CREATED.value());
+}
 
-
+// TODO: Refatorar. Deve-se passar um login válido
 	private void geraToken() {
-		AutenticacaoResponse autenticacaoResponse =
-			given()
-				.basePath("/auth/login")
-				.body("{\n" +
-						"    \"username\": \"admin@er7sistemas.com\",\n" +
-						"    \"password\": \"admin123\"\n" +
-						"}")
-				.contentType(ContentType.JSON)
-				.accept(ContentType.JSON)
-			.when()
-				.post()
-				.body()
-				.as(AutenticacaoResponse.class);
-		this.token = autenticacaoResponse.getToken();
+		AutenticacaoResponse authResponse =
+				given()
+						.basePath("/auth/login")
+						.body("{\n" +
+								"    \"username\": \"teste@teste.com\",\n" +
+								"    \"password\": \"teste\"\n" +
+								"}")
+						.contentType(ContentType.JSON)
+						.accept(ContentType.JSON)
+						.when()
+						.post()
+						.body()
+						.as(AutenticacaoResponse.class);
+		this.token = authResponse.getToken();
 	}
 }
 
