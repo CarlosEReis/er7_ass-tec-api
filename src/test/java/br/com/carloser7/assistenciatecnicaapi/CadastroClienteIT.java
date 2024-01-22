@@ -60,5 +60,18 @@ class CadastroClienteIT {
 		.statusCode(HttpStatus.CREATED.value());
 	}
 
+	@Test
+	public void deveRetornar201_QuandoCadastrarClienteCorretoComoGestor() {
+		String tokenUserGestor = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_GESTOR);
+		given()
+			.header("Authorization", "Bearer ".concat(tokenUserGestor))
+			.body(jsonClienteCorreto)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.CREATED.value());
+	}
 }
 
