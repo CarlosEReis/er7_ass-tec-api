@@ -1,8 +1,10 @@
 package br.com.carloser7.assistenciatecnicaapi;
 
+import br.com.carloser7.assistenciatecnicaapi.util.AutenticacaoUtil;
 import br.com.carloser7.assistenciatecnicaapi.util.DatabaseCleaner;
 import br.com.carloser7.assistenciatecnicaapi.util.ResourceUtils;
 import br.com.carloser7.asstecnica.Application;
+import br.com.carloser7.asstecnica.domain.model.Roles;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,17 +17,24 @@ import org.springframework.test.context.TestPropertySource;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest(classes = {Application.class, DatabaseCleaner.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+		classes = {
+			Application.class,
+			AutenticacaoUtil.class,
+			DatabaseCleaner.class},
+		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 class CadastroClienteIT {
 
-	@LocalServerPort
-	private int port;
-	private String token;
-	private String jsonClienteCorreto;
+	@LocalServerPort private int port;
+	@Autowired private DatabaseCleaner databaseCleaner;
+	@Autowired private AutenticacaoUtil autenticacaoUtil;
 
-	@Autowired
-	private DatabaseCleaner databaseCleaner;
+	private final String jsonClienteCorreto;
+
+	CadastroClienteIT() {
+		jsonClienteCorreto = ResourceUtils.getContentFromResource("/json/correto/cliente.json");
+	}
 
 	@BeforeEach
 	void setUp() {
@@ -33,16 +42,15 @@ class CadastroClienteIT {
 		RestAssured.basePath = "/clientes";
 		RestAssured.port = port;
 
-		//databaseCleaner.clearTables();
-
-		jsonClienteCorreto = ResourceUtils.getContentFromResource("/json/correto/cliente.json");
-		geraToken();
+		databaseCleaner.clearTables();
+		autenticacaoUtil.criaUsuarios();
 	}
 
 	@Test
-	void deveRetornar201_QuandoCadastrarCliente() {
+	void deveRetornar201_QuandoCadastrarClienteCorretoComoAdmin() {
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
 		given()
-			.header("Authorization", "Bearer ".concat(token))
+			.header("Authorization", "Bearer ".concat(tokenUserAdmin))
 			.body(jsonClienteCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
@@ -50,35 +58,7 @@ class CadastroClienteIT {
 			.post()
 		.then()
 		.statusCode(HttpStatus.CREATED.value());
-}
-
-// TODO: Refatorar. Deve-se passar um login válido
-	private void geraToken() {
-		AutenticacaoResponse authResponse =
-				given()
-						.basePath("/auth/login")
-						.body("{\n" +
-								"    \"username\": \"teste@teste.com\",\n" +
-								"    \"password\": \"teste\"\n" +
-								"}")
-						.contentType(ContentType.JSON)
-						.accept(ContentType.JSON)
-						.when()
-						.post()
-						.body()
-						.as(AutenticacaoResponse.class);
-		this.token = authResponse.getToken();
-	}
-}
-
-class AutenticacaoResponse {
-	private String token;
-
-	public String getToken() {
-		return token;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
-	}
 }
+
