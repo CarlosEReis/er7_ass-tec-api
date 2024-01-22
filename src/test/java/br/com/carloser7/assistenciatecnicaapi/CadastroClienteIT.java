@@ -73,5 +73,19 @@ class CadastroClienteIT {
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
 	}
+
+	@Test
+	public void deveRetornar403_QuandoCadastrarClienteCorretoComoTecnico() {
+		String tokenUserTecnico = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_TECNICO);
+		given()
+			.header("Authorizatioin", "Bearer ".concat(tokenUserTecnico))
+			.body(jsonClienteCorreto)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.FORBIDDEN.value());
+	}
 }
 
