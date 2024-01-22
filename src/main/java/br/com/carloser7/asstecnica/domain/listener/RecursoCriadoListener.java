@@ -16,7 +16,6 @@ public class RecursoCriadoListener implements ApplicationListener<RecursoCriadoE
         var id = event.getId();
         var response = event.getResponse();
         adicionaHeaderLocation(response, id);
-        System.out.print("\n\n\n<<<<<<<<<< ADICIONANDO LOCATION NO HEADER >>>>>>>>>>\n\n\n");
     }
 
     private void adicionaHeaderLocation(HttpServletResponse response, Integer id) {
