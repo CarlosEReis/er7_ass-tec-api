@@ -58,7 +58,7 @@ class CadastroClienteIT {
 	void deveRetornar201_QuandoCadastrarClienteCorretoComoAdmin() {
 		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
 		given()
-			.header("Authorization", "Bearer ".concat(tokenUserAdmin))
+			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserAdmin))
 			.body(jsonClienteCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
@@ -72,7 +72,7 @@ class CadastroClienteIT {
 	public void deveRetornar201_QuandoCadastrarClienteCorretoComoGestor() {
 		String tokenUserGestor = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_GESTOR);
 		given()
-			.header("Authorization", "Bearer ".concat(tokenUserGestor))
+			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserGestor))
 			.body(jsonClienteCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
@@ -86,7 +86,7 @@ class CadastroClienteIT {
 	public void deveRetornar403_QuandoCadastrarClienteCorretoComoTecnico() {
 		String tokenUserTecnico = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_TECNICO);
 		given()
-			.header("Authorizatioin", "Bearer ".concat(tokenUserTecnico))
+			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserTecnico))
 			.body(jsonClienteCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
