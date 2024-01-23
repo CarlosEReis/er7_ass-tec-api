@@ -65,7 +65,7 @@ public class Cliente {
 
     @Valid
     @NotNull
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
     private List<Contato> contatos = new ArrayList<>();
 
     public Integer getId() {

@@ -4,10 +4,13 @@ import br.com.carloser7.assistenciatecnicaapi.util.AutenticacaoUtil;
 import br.com.carloser7.assistenciatecnicaapi.util.DatabaseCleaner;
 import br.com.carloser7.assistenciatecnicaapi.util.ResourceUtils;
 import br.com.carloser7.asstecnica.Application;
+import br.com.carloser7.asstecnica.domain.model.Cliente;
 import br.com.carloser7.asstecnica.domain.model.Roles;
+import br.com.carloser7.asstecnica.domain.repository.ClienteRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.http.Headers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ class CadastroClienteIT {
 	@LocalServerPort private int port;
 	@Autowired private DatabaseCleaner databaseCleaner;
 	@Autowired private AutenticacaoUtil autenticacaoUtil;
+	@Autowired private ClienteRepository clienteRepository;
 
 	private final String jsonClienteCorreto;
 
@@ -93,7 +97,7 @@ class CadastroClienteIT {
 	}
 
 	@Test
-	public void deveRetornar404_QuandoDeletaClienteInexistente() {
+	public void deveRetornar404_QuandoDeletarClienteInexistente() {
 		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserAdmin))
@@ -102,6 +106,34 @@ class CadastroClienteIT {
 			.delete("/{clienteID}")
 		.then()
 			.statusCode(HttpStatus.NOT_FOUND.value());
+	}
+
+	@Test
+	public void deveRetornar409_QuandoDeletarClienteEmUso() {
+		Cliente cliente = getClienteComContato();
+
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
+		given()
+			.header(HttpHeaders.AUTHORIZATION, tokenUserAdmin)
+			.pathParams("clienteID", cliente.getId())
+		.when()
+			.delete("/{clienteID}")
+		.then()
+			.statusCode(HttpStatus.CONFLICT.value());
+	}
+
+	private Cliente getClienteComContato() {
+		Cliente cliente = null;
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			cliente = objectMapper.readValue(jsonClienteCorreto, Cliente.class);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+		Cliente finalCliente = cliente;
+		cliente.getContatos().forEach(contato -> contato.setCliente(finalCliente));
+		cliente = clienteRepository.save(finalCliente);
+		return cliente;
 	}
 }
 
