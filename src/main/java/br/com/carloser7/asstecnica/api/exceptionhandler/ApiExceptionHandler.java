@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.api.exceptionhandler;
 
+import br.com.carloser7.asstecnica.domain.exception.EntidadeEmUsoException;
 import br.com.carloser7.asstecnica.domain.exception.OperacaoNaoPermitidaException;
 import br.com.carloser7.asstecnica.domain.exception.RecursoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
     private MessageSource messageSource;
+
+    @ExceptionHandler({ EntidadeEmUsoException.class })
+    public ResponseEntity<Object> handlerEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ApiErro apiErro = new ApiErro(
+            status.value(),
+            ErroType.ENTIDADE_EM_USO,
+            ex.getMessage()
+        );
+        return handleExceptionInternal(ex, apiErro, new HttpHeaders(), status, request);
+    }
 
     @ExceptionHandler({ RecursoNaoEncontradoException.class })
     public ResponseEntity<Object> handlerClienteNaoEncontradoException(RecursoNaoEncontradoException ex, WebRequest request) {
