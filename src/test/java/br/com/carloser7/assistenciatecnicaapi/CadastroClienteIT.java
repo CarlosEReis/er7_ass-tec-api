@@ -7,11 +7,13 @@ import br.com.carloser7.asstecnica.Application;
 import br.com.carloser7.asstecnica.domain.model.Roles;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Headers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
@@ -25,6 +27,8 @@ import static io.restassured.RestAssured.given;
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 class CadastroClienteIT {
+
+	private static final Integer ID_CLIENTE_INEXISTENTE = 99999;
 
 	@LocalServerPort private int port;
 	@Autowired private DatabaseCleaner databaseCleaner;
@@ -86,6 +90,18 @@ class CadastroClienteIT {
 			.post()
 		.then()
 			.statusCode(HttpStatus.FORBIDDEN.value());
+	}
+
+	@Test
+	public void deveRetornar404_QuandoDeletaClienteInexistente() {
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
+		given()
+			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserAdmin))
+			.pathParams("clienteID", ID_CLIENTE_INEXISTENTE)
+		.when()
+			.delete("/{clienteID}")
+		.then()
+			.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 }
 
