@@ -2,6 +2,7 @@ package br.com.carloser7.asstecnica.api.exceptionhandler;
 
 public enum ErroType {
 
+    ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso."),
     RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado."),
     DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos."),
     OPERACAO_NAO_PERMITIDA("/operacao-nao-permitida", "Não é possível executar esta operação.");
