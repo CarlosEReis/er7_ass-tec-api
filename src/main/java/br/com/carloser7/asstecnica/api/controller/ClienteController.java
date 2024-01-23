@@ -64,11 +64,7 @@ public class ClienteController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Object> deletar(@PathVariable Integer id) {
-        var cliente = this.clienteRepository.findById(id);
-        if (cliente.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        this.clienteRepository.delete(cliente.get());
+        this.cadastroClienteService.remover(id);
         return ResponseEntity.noContent().build();
     }
 }
