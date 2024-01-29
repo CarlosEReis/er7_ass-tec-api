@@ -1,7 +1,7 @@
 package br.com.carloser7.assistenciatecnicaapi.util;
 
 import br.com.carloser7.asstecnica.domain.model.Permissao;
-import br.com.carloser7.asstecnica.domain.model.Roles;
+import br.com.carloser7.asstecnica.domain.model.RoleType;
 import br.com.carloser7.asstecnica.domain.model.Usuario;
 import br.com.carloser7.asstecnica.domain.repository.PermissaoRepository;
 import br.com.carloser7.asstecnica.domain.repository.UsuarioRepository;
@@ -53,7 +53,7 @@ public class AutenticacaoUtil {
         usuarioRepository.save(usuario3);
     }
 
-    public String geraTokenUsuarioComRole(Roles role) {
+    public String geraTokenUsuarioComRole(RoleType role) {
         String jsonUserRole = buscaUsuarioComRole(role);
         AutenticacaoResponse authResponse =
             given()
@@ -81,7 +81,7 @@ public class AutenticacaoUtil {
         permissaoRepository.saveAll(List.of(p1, p2, p3));
     }
 
-    private String buscaUsuarioComRole(Roles role) {
+    private String buscaUsuarioComRole(RoleType role) {
         String fileName = role.toString().split("_")[1].toLowerCase().concat(".json");
         String pathUserRole = "/json/correto/users/".concat(fileName);
         return ResourceUtils.getContentFromResource(pathUserRole);

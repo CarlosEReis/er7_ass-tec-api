@@ -62,6 +62,14 @@ public class Usuario {
         this.permissoes = permissoes;
     }
 
+    public boolean naoPossuiPermissao(RoleType role) {
+        return getPermissoes()
+            .stream()
+            .noneMatch(
+                permissao -> permissao.getNome().equals(RoleType.ROLE_ADMIN.toString())
+            );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

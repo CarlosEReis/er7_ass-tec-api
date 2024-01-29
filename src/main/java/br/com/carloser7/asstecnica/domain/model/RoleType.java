@@ -1,6 +1,6 @@
 package br.com.carloser7.asstecnica.domain.model;
 
-public enum Roles {
+public enum RoleType {
 
     ROLE_ADMIN,
     ROLE_GESTOR,

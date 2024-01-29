@@ -5,7 +5,7 @@ import br.com.carloser7.assistenciatecnicaapi.util.DatabaseCleaner;
 import br.com.carloser7.assistenciatecnicaapi.util.ResourceUtils;
 import br.com.carloser7.asstecnica.Application;
 import br.com.carloser7.asstecnica.domain.model.Cliente;
-import br.com.carloser7.asstecnica.domain.model.Roles;
+import br.com.carloser7.asstecnica.domain.model.RoleType;
 import br.com.carloser7.asstecnica.domain.repository.ClienteRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +56,7 @@ class CadastroClienteIT {
 
 	@Test
 	void deveRetornar201_QuandoCadastrarClienteCorretoComoAdmin() {
-		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(RoleType.ROLE_ADMIN);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserAdmin))
 			.body(jsonClienteCorreto)
@@ -70,7 +70,7 @@ class CadastroClienteIT {
 
 	@Test
 	public void deveRetornar201_QuandoCadastrarClienteCorretoComoGestor() {
-		String tokenUserGestor = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_GESTOR);
+		String tokenUserGestor = autenticacaoUtil.geraTokenUsuarioComRole(RoleType.ROLE_GESTOR);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserGestor))
 			.body(jsonClienteCorreto)
@@ -84,7 +84,7 @@ class CadastroClienteIT {
 
 	@Test
 	public void deveRetornar403_QuandoCadastrarClienteCorretoComoTecnico() {
-		String tokenUserTecnico = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_TECNICO);
+		String tokenUserTecnico = autenticacaoUtil.geraTokenUsuarioComRole(RoleType.ROLE_TECNICO);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserTecnico))
 			.body(jsonClienteCorreto)
@@ -98,7 +98,7 @@ class CadastroClienteIT {
 
 	@Test
 	public void deveRetornar404_QuandoDeletarClienteInexistente() {
-		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(RoleType.ROLE_ADMIN);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, "Bearer ".concat(tokenUserAdmin))
 			.pathParams("clienteID", ID_CLIENTE_INEXISTENTE)
@@ -112,7 +112,7 @@ class CadastroClienteIT {
 	public void deveRetornar409_QuandoDeletarClienteEmUso() {
 		Cliente cliente = getClienteComContato();
 
-		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(Roles.ROLE_ADMIN);
+		String tokenUserAdmin = autenticacaoUtil.geraTokenUsuarioComRole(RoleType.ROLE_ADMIN);
 		given()
 			.header(HttpHeaders.AUTHORIZATION, tokenUserAdmin)
 			.pathParams("clienteID", cliente.getId())
