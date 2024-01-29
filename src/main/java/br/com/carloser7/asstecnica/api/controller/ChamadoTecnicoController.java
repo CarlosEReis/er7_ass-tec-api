@@ -5,7 +5,6 @@ import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoIn
 import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.KpisPrincipal;
-import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.model.*;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
@@ -66,8 +65,10 @@ public class ChamadoTecnicoController {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
         ChamadoTecnico chamado = this.cadastroChamadoTecnicoService.criar(chamadoTecnico);
 
+
+        // TODO: Remove puplicacao de evento de chamado criado
         this.publisher.publishEvent(new RecursoCriadoEvent(this, response, chamado.getId()));
-        this.publisher.publishEvent(new ChamadoCriadoEvent(this, chamado));
+        //this.publisher.publishEvent(new ChamadoCriadoEvent(this, chamado));
 
         return chamado;
     }
