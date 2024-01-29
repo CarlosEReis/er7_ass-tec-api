@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Component
 public class GerenciadorDeStatus {
 
-    private static final Roles ADMIN = Roles.ROLE_ADMIN;
+    private static final RoleType ADMIN = RoleType.ROLE_ADMIN;
 
     public static void setStatusChamado(ChamadoTecnico chamado, StatusChamadoTecnico status) {
         Usuario usuario = getUsuarioAtual();
