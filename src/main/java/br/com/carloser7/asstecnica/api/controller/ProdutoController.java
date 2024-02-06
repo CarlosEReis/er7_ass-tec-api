@@ -1,5 +1,9 @@
 package br.com.carloser7.asstecnica.api.controller;
 
+import br.com.carloser7.asstecnica.api.assembler.ProdutoOutputAssembler;
+import br.com.carloser7.asstecnica.api.disassembler.ProdutoInputDisassembler;
+import br.com.carloser7.asstecnica.api.model.input.ProdutoInput;
+import br.com.carloser7.asstecnica.api.model.output.ProdutoOutput;
 import br.com.carloser7.asstecnica.domain.model.Produto;
 import br.com.carloser7.asstecnica.domain.service.CadastroProdutoService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,32 +21,37 @@ import org.springframework.web.bind.annotation.*;
 public class ProdutoController {
 
     @Autowired private CadastroProdutoService produtoService;
+    @Autowired private ProdutoOutputAssembler produtoOutputAssembler;
+    @Autowired private ProdutoInputDisassembler produtoInputDisassembler;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
-    public ResponseEntity<Page<Produto>> listar(@RequestParam(required = false) String search, Pageable pageable) {
-        var result = this.produtoService.pesquisa(search, search, pageable);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<Page<ProdutoOutput>> listar(@RequestParam(required = false) String search, Pageable pageable) {
+        Page<Produto> pageProduto = produtoService.pesquisa(search, search, pageable);
+        Page<ProdutoOutput> pageProdutoOutput = produtoOutputAssembler.toCollectionOutput(pageProduto);
+        return ResponseEntity.ok(pageProdutoOutput);
     }
 
     @GetMapping("/{produtoID}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
-    public Produto buscarPorId(@PathVariable Integer produtoID) {
-        return this.produtoService.buscaPorIDOuFalha(produtoID);
+    public ProdutoOutput buscarPorId(@PathVariable Integer produtoID) {
+        return produtoOutputAssembler.toOutput(produtoService.buscaPorIDOuFalha(produtoID));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
-    public ResponseEntity<Produto> criar(@RequestBody Produto produto, HttpServletResponse response) {
-        produto = this.produtoService.adiciona(produto, response);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produto);
+    public ResponseEntity<ProdutoOutput> criar(@RequestBody ProdutoInput produtoInput, HttpServletResponse response) {
+        Produto produto = produtoInputDisassembler.toDomainObject(produtoInput);
+        ProdutoOutput produtoOutput = produtoOutputAssembler.toOutput(produtoService.adiciona(produto, response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoOutput);
     }
 
     @PutMapping("/{produtoID}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
-    public Produto atualizar(@PathVariable Integer produtoID, @RequestBody @Valid Produto produto) {
-        produto = this.produtoService.atualizar(produtoID, produto);
-        return produto;
+    public ProdutoOutput atualizar(@PathVariable Integer produtoID, @RequestBody @Valid ProdutoInput produtoInput) {
+        Produto produdoDB = produtoService.buscaPorIDOuFalha(produtoID);
+        produtoInputDisassembler.copyToDomainObject(produtoInput, produdoDB);
+        return produtoOutputAssembler.toOutput(produtoService.atualizar(produdoDB));
     }
 
 }
