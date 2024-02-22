@@ -1,12 +1,14 @@
 package br.com.carloser7.asstecnica.api.controller;
 
+import br.com.carloser7.asstecnica.domain.filter.ClienteFilter;
 import br.com.carloser7.asstecnica.domain.model.Cliente;
-import br.com.carloser7.asstecnica.domain.repository.projection.ClienteView;
+import br.com.carloser7.asstecnica.domain.repository.projection.ClienteResumoProjection;
 import br.com.carloser7.asstecnica.domain.service.CadastroClienteService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,9 @@ public class ClienteController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_GESTOR', 'ROLE_TECNICO')")
-    public ResponseEntity<Page<ClienteView>> pesquisar(String nome, Pageable pageable) {
-        Page<ClienteView> pesquisa = this.cadastroClienteService.pesquisar(nome, pageable);
-        return ResponseEntity.ok(pesquisa);
+    public Page<ClienteResumoProjection> pesquisar(ClienteFilter filter, Pageable pageable) {
+        var clientes = cadastroClienteService.pesquisar(filter);
+        return new PageImpl<>(clientes, pageable, clientes.size());
     }
 
     @GetMapping("/{id}")

@@ -3,19 +3,18 @@ package br.com.carloser7.asstecnica.domain.service;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.exception.ClienteNaoEncontradoException;
 import br.com.carloser7.asstecnica.domain.exception.EntidadeEmUsoException;
+import br.com.carloser7.asstecnica.domain.filter.ClienteFilter;
 import br.com.carloser7.asstecnica.domain.model.Cliente;
 import br.com.carloser7.asstecnica.domain.repository.ClienteRepository;
-import br.com.carloser7.asstecnica.domain.repository.projection.ClienteView;
+import br.com.carloser7.asstecnica.domain.repository.projection.ClienteResumoProjection;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 @Service
 public class CadastroClienteService {
@@ -40,12 +39,17 @@ public class CadastroClienteService {
                 () -> new ClienteNaoEncontradoException(clienteID));
     }
 
-    public Page<ClienteView> pesquisar(String nome, Pageable pageable) {
+    /*public Page<ClienteView> pesquisar(String nome, Pageable pageable) {
         if (StringUtils.hasText(nome)) {
             return this.clienteRepository.findByNomeContaining(nome, pageable);
         }
         return this.clienteRepository.findAllBy(pageable);
+    }*/
+
+    public List<ClienteResumoProjection> pesquisar(ClienteFilter clienteFilter) {
+        return clienteRepository.pesquisar(clienteFilter);
     }
+
 
     public void remover(Integer clienteID) {
         Assert.notNull(clienteID, "O ID do cliente não pode ser nulo");
