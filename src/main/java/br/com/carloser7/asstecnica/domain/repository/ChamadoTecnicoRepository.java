@@ -46,7 +46,7 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
         GROUP BY id_produto
         ORDER BY quantidade desc
         LIMIT 4;""", nativeQuery = true)
-    List<Top4Produtos> top4ProdutoDefeito(@Param("ano") Year ano);
+    List<TopProdutos> top4ProdutoDefeito(@Param("ano") Year ano);
 
     @Query(value = """
         SELECT
@@ -130,4 +130,6 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
           (:ano IS NULL OR YEAR(st.data) = :ano) AND st.status = 'AVALIADO'
         GROUP BY st.status""", nativeQuery = true)
     KpisPrincipal qtdeDeItensAvaliados(@Param("ano") Year ano);
+
+
 }

@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,22 +109,22 @@ public class ChamadoTecnicoController {
 
     @GetMapping("/estatisticas/kpis-principal")
     public List<KpisPrincipal> kpisPrincipais() {
-        return this.chamadoTecnicoRepository.kpisPrincipais();
+        return this.chamadoTecnicoRepository.kpisPrincipais(Year.now());
     }
 
     @GetMapping("/estatisticas/top4-produtos")
     public List<?> top4ProdutosComDefeito() {
-        return this.chamadoTecnicoRepository.top4ProdutoDefeito();
+        return this.chamadoTecnicoRepository.top4ProdutoDefeito(Year.now());
     }
 
     @GetMapping("/estatisticas/top3-clientes")
     public List<?> top3ClienteComMaisChamados() {
-        return this.chamadoTecnicoRepository.top3ClienteComMaisChamados();
+        return this.chamadoTecnicoRepository.top3ClienteComMaisChamados(Year.now());
     }
 
     @GetMapping("/estatisticas/top3-tecnicos")
     public List<?> top3TecnicosMaisFinalizaraChamados() {
-        return this.chamadoTecnicoRepository.top3TecnicosMaisFinalizaraChamados();
+        return this.chamadoTecnicoRepository.top3TecnicosMaisFinalizaramChamados(Year.now());
     }
 
     @GetMapping("/estatisticas/status-chamado-pordia")
@@ -133,12 +134,12 @@ public class ChamadoTecnicoController {
 
     @GetMapping("/estatisticas/status-chamado-pormes")
     public List<?> statusChamadosPorMes() {
-        return this.chamadoTecnicoRepository.statusChamadosPorMes();
+        return this.chamadoTecnicoRepository.statusChamadosPorMes(Year.now());
     }
 
     @GetMapping("/estatisticas/itens-avaliados")
     public KpisPrincipal qtdeItensAvaliados() {
-        return this.chamadoTecnicoRepository.qtdeDeItensAvaliados();
+        return this.chamadoTecnicoRepository.qtdeDeItensAvaliados(Year.now());
     }
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
