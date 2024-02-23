@@ -6,6 +6,7 @@ import br.com.carloser7.asstecnica.api.model.input.ProdutoInput;
 import br.com.carloser7.asstecnica.api.model.output.ProdutoOutput;
 import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
 import br.com.carloser7.asstecnica.domain.model.Produto;
+import br.com.carloser7.asstecnica.domain.repository.projection.ProdutoResumoProjection;
 import br.com.carloser7.asstecnica.domain.service.CadastroProdutoService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,8 +28,8 @@ public class ProdutoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
-        public Page<Produto> pesquisa(ProdutoFilter produtoFilter, Pageable pageable) {
-        return produtoService.pequisa(produtoFilter, pageable);
+        public Page<ProdutoResumoProjection> pesquisa(ProdutoFilter produtoFilter, Pageable pageable) {
+        return produtoService.pequisa(produtoFilter.sku(), produtoFilter.nome(), pageable);
     }
 
     @GetMapping("/{produtoID}")

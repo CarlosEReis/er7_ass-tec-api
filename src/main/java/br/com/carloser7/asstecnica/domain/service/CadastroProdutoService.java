@@ -3,16 +3,16 @@ package br.com.carloser7.asstecnica.domain.service;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.exception.NegocioException;
 import br.com.carloser7.asstecnica.domain.exception.ProdutoNaoEncontradoException;
-import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
 import br.com.carloser7.asstecnica.domain.model.Produto;
 import br.com.carloser7.asstecnica.domain.repository.ProdutoRepository;
-import br.com.carloser7.asstecnica.infra.specification.ProdutoSpecification;
+import br.com.carloser7.asstecnica.domain.repository.projection.ProdutoResumoProjection;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class CadastroProdutoService {
@@ -20,9 +20,11 @@ public class CadastroProdutoService {
     @Autowired private ProdutoRepository produtoRepository;
     @Autowired private ApplicationEventPublisher publisher;
 
-    public Page<Produto> pequisa(ProdutoFilter produtoFilter, Pageable pageable) {
-        var produtoSpec = ProdutoSpecification.comFiltro(produtoFilter);
-        return produtoRepository.findAll(produtoSpec, pageable);
+    public Page<ProdutoResumoProjection> pequisa(String sku, String nome, Pageable pageable) {
+        if (StringUtils.hasText(sku) || StringUtils.hasText(nome))
+            return produtoRepository.findBySkuContainingOrNomeContaining(sku, nome, pageable);
+        
+        return produtoRepository.findAllBy(pageable);
     }
 
     public Produto adiciona(Produto produto, HttpServletResponse response) {
