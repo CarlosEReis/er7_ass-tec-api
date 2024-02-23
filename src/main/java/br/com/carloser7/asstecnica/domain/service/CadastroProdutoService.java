@@ -6,13 +6,13 @@ import br.com.carloser7.asstecnica.domain.exception.ProdutoNaoEncontradoExceptio
 import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
 import br.com.carloser7.asstecnica.domain.model.Produto;
 import br.com.carloser7.asstecnica.domain.repository.ProdutoRepository;
-import br.com.carloser7.asstecnica.domain.repository.projection.ProdutoResumoProjection;
+import br.com.carloser7.asstecnica.infra.specification.ProdutoSpecification;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CadastroProdutoService {
@@ -20,8 +20,9 @@ public class CadastroProdutoService {
     @Autowired private ProdutoRepository produtoRepository;
     @Autowired private ApplicationEventPublisher publisher;
 
-    public List<ProdutoResumoProjection> pequisa(ProdutoFilter produtoFilter) {
-        return produtoRepository.pesquisa(produtoFilter);
+    public Page<Produto> pequisa(ProdutoFilter produtoFilter, Pageable pageable) {
+        var produtoSpec = ProdutoSpecification.comFiltro(produtoFilter);
+        return produtoRepository.findAll(produtoSpec, pageable);
     }
 
     public Produto adiciona(Produto produto, HttpServletResponse response) {

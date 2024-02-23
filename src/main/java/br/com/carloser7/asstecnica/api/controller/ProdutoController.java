@@ -6,13 +6,11 @@ import br.com.carloser7.asstecnica.api.model.input.ProdutoInput;
 import br.com.carloser7.asstecnica.api.model.output.ProdutoOutput;
 import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
 import br.com.carloser7.asstecnica.domain.model.Produto;
-import br.com.carloser7.asstecnica.domain.repository.projection.ProdutoResumoProjection;
 import br.com.carloser7.asstecnica.domain.service.CadastroProdutoService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +27,8 @@ public class ProdutoController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
-    public Page<ProdutoResumoProjection> pesquisa(ProdutoFilter produtoFilter, Pageable pageable) {
-        var produtos = produtoService.pequisa(produtoFilter);
-        return new PageImpl<>(produtos, pageable, produtos.size());
+        public Page<Produto> pesquisa(ProdutoFilter produtoFilter, Pageable pageable) {
+        return produtoService.pequisa(produtoFilter, pageable);
     }
 
     @GetMapping("/{produtoID}")
