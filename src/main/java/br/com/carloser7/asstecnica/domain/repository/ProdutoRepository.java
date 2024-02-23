@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository <Produto, Integer>{
+public interface ProdutoRepository extends JpaRepository <Produto, Integer>, ProdutoRepositoryQueries{
 
     boolean existsBySku(String sku);
     List<Produto> findBySku(String sku);

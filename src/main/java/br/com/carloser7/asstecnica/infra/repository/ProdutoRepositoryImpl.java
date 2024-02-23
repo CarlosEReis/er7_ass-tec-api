@@ -1,6 +1,9 @@
 package br.com.carloser7.asstecnica.infra.repository;
 
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopProdutos;
 import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
+import br.com.carloser7.asstecnica.domain.filter.TopProdutoFilter;
+import br.com.carloser7.asstecnica.domain.model.ItemChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.model.Produto;
 import br.com.carloser7.asstecnica.domain.repository.ProdutoRepositoryQueries;
 import br.com.carloser7.asstecnica.domain.repository.projection.ProdutoResumoProjection;
@@ -44,5 +47,41 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
         query.where(predicates.toArray(new Predicate[0]));
 
         return manager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public List<TopProdutos> topProdutos(TopProdutoFilter filtro) {
+
+        var buider = manager.getCriteriaBuilder();
+        var query = buider.createQuery(TopProdutos.class);
+        var root = query.from(ItemChamadoTecnico.class);
+
+        root.join("produto");
+        root.join("chamadoTecnico");
+
+        var predicates = new ArrayList<Predicate>();
+
+        if (filtro.data() != null && filtro.data().dataInicial() != null)
+            predicates.add(
+                buider.greaterThanOrEqualTo(
+                    root.get("chamadoTecnico").get("dataCriacao"),
+                    filtro.data().dataInicial()));
+
+        if (filtro.data() != null && filtro.data().dataFinal() != null)
+            predicates.add(
+                buider.lessThanOrEqualTo(
+                    root.get("chamadoTecnico").get("dataCriacao"),
+                    filtro.data().dataFinal()));
+
+        var selection = buider.construct(
+                TopProdutos.class,
+                root.get("produto").get("sku"),
+                buider.count(root.get("produto")).alias("quantidade"));
+
+        query.select(selection);
+        query.where(predicates.toArray(new Predicate[0]));
+        query.groupBy(root.get("produto"));
+        query.orderBy(buider.desc(buider.count(root.get("produto"))));
+        return manager.createQuery(query).setMaxResults(filtro.top()).getResultList();
     }
 }
