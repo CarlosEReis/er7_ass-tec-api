@@ -9,7 +9,7 @@ public record TopProdutoFilter(
     public TopProdutoFilter {
         if (top == null) top = 5;
         if (data == null) {
-            DataFilter dataFilter = new DataFilter(dataInicial(), OffsetDateTime.now(ZoneOffset.UTC));
+            data = new DataFilter(dataInicial(), OffsetDateTime.now(ZoneOffset.UTC));
         }
     }
 
