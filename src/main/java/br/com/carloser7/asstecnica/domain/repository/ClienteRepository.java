@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
+public interface ClienteRepository extends JpaRepository<Cliente, Integer>, ClienteResitoryQueries {
 
     Page<ClienteView> findAllBy(Pageable pageable);
     Page<ClienteView> findByNomeContainingOrDocumentoContaining(String nome, String documento, Pageable pageable);
