@@ -94,6 +94,18 @@ public class ItemChamadoTecnico {
         this.status = status;
     }
 
+    public void pendente(String usuario) {
+        setStatus(usuario, StatusItemChamadoTecnico.PENDENTE);
+    }
+
+    public void avanliando(String usuario) {
+        setStatus(usuario, StatusItemChamadoTecnico.AVALIANDO);
+    }
+
+    public void avaliado(String usuario) {
+        setStatus(usuario, StatusItemChamadoTecnico.AVALIADO);
+    }
+
     @Transient
     public StatusItemChamadoTecnico getUltimoStatus() {
         if (this.status.isEmpty()) {
@@ -101,6 +113,15 @@ public class ItemChamadoTecnico {
         }
         var statusSize = this.status.size();
         return this.getStatus().get(statusSize - 1).getStatus();
+    }
+
+    private void setStatus(String usuario, StatusItemChamadoTecnico status) {
+        getStatus().add(
+                new StatusItemChamadoObject(
+                        usuario,
+                        status,
+                        this
+                ));
     }
 
     @Override

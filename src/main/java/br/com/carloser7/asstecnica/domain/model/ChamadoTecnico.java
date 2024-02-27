@@ -1,11 +1,11 @@
 package br.com.carloser7.asstecnica.domain.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "chamado")
@@ -93,6 +93,18 @@ public class ChamadoTecnico {
         this.statusList = statusList;
     }
 
+    public void enviarParaFila(String usuario) {
+        setStatus(usuario, StatusChamadoTecnico.FILA);
+    }
+
+    public void enviarParaProcessamento(String usuario) {
+        setStatus(usuario, StatusChamadoTecnico.PROCESSANDO);
+    }
+
+    public void finalizar(String usuario) {
+        setStatus(usuario, StatusChamadoTecnico.FINALIZADO);
+    }
+
     @Transient
     public StatusChamadoTecnico getUltimoStatus() {
         if (this.statusList.isEmpty()) {
@@ -100,6 +112,16 @@ public class ChamadoTecnico {
         }
         var statusSize = this.statusList.size();
         return this.statusList.get(statusSize - 1).getStatus();
+    }
+
+    private void setStatus(String usuario, StatusChamadoTecnico status) {
+        getStatusList().add(
+            new StatusChamadoObject(
+                usuario,
+                status,
+                this
+            ));
+        setStatus(status);
     }
 
     @Override
