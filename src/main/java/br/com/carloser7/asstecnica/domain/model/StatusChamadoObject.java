@@ -15,6 +15,14 @@ public class StatusChamadoObject extends Status {
     @JoinColumn(name = "id_chamado")
     private ChamadoTecnico chamadoTecnico;
 
+    public StatusChamadoObject() { }
+
+    public StatusChamadoObject(String nomeUsuario, StatusChamadoTecnico status, ChamadoTecnico chamadoTecnico) {
+        super(nomeUsuario);
+        this.status = status;
+        this.chamadoTecnico = chamadoTecnico;
+    }
+
     public StatusChamadoTecnico getStatus() {
         return status;
     }

@@ -1,7 +1,7 @@
 package br.com.carloser7.asstecnica.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,15 +14,17 @@ public abstract class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @CreationTimestamp
     @Column(name = "data")
     private LocalDateTime dataStatus;
+
     @Column(name = "usuario")
     private String nomeUsuario;
 
     public Status() {}
 
-    public Status(LocalDateTime dataStatus, String nomeUsuario) {
-        this.dataStatus = dataStatus;
+    public Status(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
 
@@ -49,14 +51,6 @@ public abstract class Status {
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
-
-    /**public ChamadoTecnico getChamaoTecnico() {
-        return chamaoTecnico;
-    }
-
-    public void setChamaoTecnico(ChamadoTecnico chamaoTecnico) {
-        this.chamaoTecnico = chamaoTecnico;
-    }**/
 
     @Override
     public boolean equals(Object object) {

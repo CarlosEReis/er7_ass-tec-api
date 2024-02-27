@@ -3,8 +3,6 @@ package br.com.carloser7.asstecnica.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @DiscriminatorValue("ITEM")
 public class StatusItemChamadoObject extends Status {
@@ -19,8 +17,8 @@ public class StatusItemChamadoObject extends Status {
 
     public StatusItemChamadoObject(){}
 
-    public StatusItemChamadoObject(LocalDateTime data, String usuario, StatusItemChamadoTecnico status, ItemChamadoTecnico itemChamado) {
-        super(data, usuario);
+    public StatusItemChamadoObject(String usuario, StatusItemChamadoTecnico status, ItemChamadoTecnico itemChamado) {
+        super(usuario);
         this.status = status;
         this.itemChamado = itemChamado;
     }
