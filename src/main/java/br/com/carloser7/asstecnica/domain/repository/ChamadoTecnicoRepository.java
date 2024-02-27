@@ -61,6 +61,7 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
         LIMIT 3""", nativeQuery = true)
     List<Top3ClienteMaisChamados> top3ClienteComMaisChamados(@Param("ano") Year ano);
 
+    // TODO: Refatorar para Criteria após implementar o retorno de status FINALIZADO > PROCESSANDO > FILA
     @Query(value = """
         SELECT
             st.usuario AS tecnico,
@@ -89,6 +90,8 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
        GROUP BY DATE(st.data), st.status""", nativeQuery = true)
     List<StatusChamadoDia> statusChamadosPorDia();
 
+
+    // TODO: Refatorar para Criteria após implementar o retorno de status FINALIZADO > PROCESSANDO > FILA
     @Query(value = """
         WITH Meses AS (
             SELECT 1 AS mes
