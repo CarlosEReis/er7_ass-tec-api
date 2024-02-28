@@ -11,6 +11,7 @@ import br.com.carloser7.asstecnica.domain.model.*;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
 import br.com.carloser7.asstecnica.domain.repository.projection.ChamadoTecnicoView;
 import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
+import br.com.carloser7.asstecnica.domain.service.FluxoChamadoService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
@@ -19,6 +20,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,14 +36,10 @@ import java.util.Optional;
 @RequestMapping("/chamados")
 public class ChamadoTecnicoController {
 
-    @Autowired
-    private ChamadoTecnicoRepository chamadoTecnicoRepository;
-
-    @Autowired
-    private CadastroChamadoTecnicoService cadastroChamadoTecnicoService;
-
-    @Autowired
-    private ApplicationEventPublisher publisher;
+    @Autowired private ChamadoTecnicoRepository chamadoTecnicoRepository;
+    @Autowired private CadastroChamadoTecnicoService cadastroChamadoTecnicoService;
+    @Autowired private ApplicationEventPublisher publisher;
+    @Autowired private FluxoChamadoService fluxoChamadoService;
 
     @GetMapping()
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
@@ -83,7 +81,6 @@ public class ChamadoTecnicoController {
 
         if (chamadoBanco.isPresent()) {
             ChamadoTecnico novoChamado = this.toDomainObject(chamadoInput);
-
             chamadoBanco.get().getItens().clear();
             chamadoBanco.get().getItens().addAll(novoChamado.getItens());
             chamadoBanco.get().getItens().forEach(item -> item.setChamadoTecnico(chamadoBanco.get()));
@@ -101,10 +98,18 @@ public class ChamadoTecnicoController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }
 
+    @PostMapping(value = "/{chamadoID}/alteracao-status")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void retornaStatusChamado(@PathVariable Integer chamadoID, @RequestBody String status) {
+        StatusChamadoTecnico statusChamadoTecnico = StatusChamadoTecnico.valueOf(status);
+        fluxoChamadoService.retonarStatus(chamadoID, statusChamadoTecnico);
+    }
+
     @PostMapping(value = "/{idChamado}/alteracao-status-item/{idItemChamado}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
-        return this.cadastroChamadoTecnicoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
+        return fluxoChamadoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
     }
 
     @GetMapping("/estatisticas/kpis-principal")
