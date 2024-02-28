@@ -114,6 +114,29 @@ public class ChamadoTecnico {
         return this.statusList.get(statusSize - 1).getStatus();
     }
 
+    public boolean todosItemAvaliados() {
+        var avaliados = true;
+        for (ItemChamadoTecnico item : itens) {
+            if (item.naoEstaAvaliado()) {
+                avaliados = false;
+                break;
+            }
+        }
+        return avaliados;
+    }
+
+    public boolean estaNaFila() {
+        return StatusChamadoTecnico.FILA.equals(getUltimoStatus());
+    }
+
+    public boolean estaEmProcessamento() {
+        return StatusChamadoTecnico.PROCESSANDO.equals(getUltimoStatus());
+    }
+
+    public boolean estaFinalizado() {
+        return StatusChamadoTecnico.FINALIZADO.equals(getUltimoStatus());
+    }
+
     private void setStatus(String usuario, StatusChamadoTecnico status) {
         getStatusList().add(
             new StatusChamadoObject(

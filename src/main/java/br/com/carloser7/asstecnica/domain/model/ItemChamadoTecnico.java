@@ -98,12 +98,21 @@ public class ItemChamadoTecnico {
         setStatus(usuario, StatusItemChamadoTecnico.PENDENTE);
     }
 
-    public void avanliando(String usuario) {
+    public void avaliando(String usuario) {
         setStatus(usuario, StatusItemChamadoTecnico.AVALIANDO);
     }
 
     public void avaliado(String usuario) {
         setStatus(usuario, StatusItemChamadoTecnico.AVALIADO);
+    }
+
+    private void setStatus(String usuario, StatusItemChamadoTecnico status) {
+        getStatus().add(
+            new StatusItemChamadoObject(
+                usuario,
+                status,
+                this
+            ));
     }
 
     @Transient
@@ -115,13 +124,12 @@ public class ItemChamadoTecnico {
         return this.getStatus().get(statusSize - 1).getStatus();
     }
 
-    private void setStatus(String usuario, StatusItemChamadoTecnico status) {
-        getStatus().add(
-                new StatusItemChamadoObject(
-                        usuario,
-                        status,
-                        this
-                ));
+    public boolean estaAvaliado() {
+        return StatusItemChamadoTecnico.AVALIADO.equals(getUltimoStatus());
+    }
+
+    public boolean naoEstaAvaliado() {
+        return !estaAvaliado();
     }
 
     @Override
