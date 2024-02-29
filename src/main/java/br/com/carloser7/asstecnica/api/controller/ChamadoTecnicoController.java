@@ -12,6 +12,7 @@ import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepository;
 import br.com.carloser7.asstecnica.domain.repository.projection.ChamadoTecnicoView;
 import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
 import br.com.carloser7.asstecnica.domain.service.FluxoChamadoService;
+import br.com.carloser7.asstecnica.infra.service.FichaPdfChamadoService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
@@ -40,6 +41,7 @@ public class ChamadoTecnicoController {
     @Autowired private CadastroChamadoTecnicoService cadastroChamadoTecnicoService;
     @Autowired private ApplicationEventPublisher publisher;
     @Autowired private FluxoChamadoService fluxoChamadoService;
+    @Autowired private FichaPdfChamadoService fichaPdfChamadoService;
 
     @GetMapping()
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
@@ -64,7 +66,6 @@ public class ChamadoTecnicoController {
     public ChamadoTecnico criar(@RequestBody @Valid ChamadoInput chamadoInput, HttpServletResponse response) {
         ChamadoTecnico chamadoTecnico = toDomainObject(chamadoInput);
         ChamadoTecnico chamado = this.cadastroChamadoTecnicoService.criar(chamadoTecnico);
-
 
         // TODO: Remove puplicacao de evento de chamado criado
         this.publisher.publishEvent(new RecursoCriadoEvent(this, response, chamado.getId()));
@@ -93,7 +94,7 @@ public class ChamadoTecnicoController {
     @GetMapping("/{idChamado}/ficha")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ResponseEntity<byte[]> fichaChamadoTecnicoPDF(@PathVariable Integer idChamado) throws JRException {
-        byte[] ficha = this.cadastroChamadoTecnicoService.geraFichaChamdo(idChamado);
+        byte[] ficha = fichaPdfChamadoService.geraFichaChamdo(idChamado);
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE).body(ficha);
     }

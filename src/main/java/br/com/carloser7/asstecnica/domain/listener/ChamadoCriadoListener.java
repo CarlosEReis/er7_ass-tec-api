@@ -6,6 +6,7 @@ import br.com.carloser7.asstecnica.domain.event.ChamadoProcessandoEvent;
 import br.com.carloser7.asstecnica.domain.model.Contato;
 import br.com.carloser7.asstecnica.domain.service.CadastroChamadoTecnicoService;
 import br.com.carloser7.asstecnica.infra.EmailService;
+import br.com.carloser7.asstecnica.infra.service.FichaPdfChamadoService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -19,11 +20,9 @@ import java.util.List;
 @Component
 public class ChamadoCriadoListener  {
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private CadastroChamadoTecnicoService chamadoTecnicoService;
+    @Autowired private EmailService emailService;
+    @Autowired private FichaPdfChamadoService fichaPdfChamadoService;
+    @Autowired private CadastroChamadoTecnicoService chamadoTecnicoService;
 
     @Async
     @EventListener
@@ -54,7 +53,7 @@ public class ChamadoCriadoListener  {
         var assunto = "ER7 Sistemas \uD83D\uDFE0: Chamado %s ABERTO".formatted(id);
         var nomeAnexo = chamado.getId().toString().concat("_").concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddkkmm"))).concat(".pdf");
         String concat = LocalDateTime.now().toString();
-        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(chamado);
+        var fichaTecnica = fichaPdfChamadoService.relatorioFichaChamadoTecnico(chamado);
 
         this.emailService.enviarEmailComAnexo(
                 "carlos.er7@hotmail.com",
@@ -118,7 +117,7 @@ public class ChamadoCriadoListener  {
                 .formatted(id, cliente);
 
 
-        var fichaTecnica = chamadoTecnicoService.relatorioFichaChamadoTecnico(event.getChamado());
+        var fichaTecnica = fichaPdfChamadoService.relatorioFichaChamadoTecnico(event.getChamado());
         var nomeAnexo = event.getChamado().getId().toString().concat("_").concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddkkmm"))).concat(".pdf");
         this.emailService.enviarEmailComAnexo("carlos.er7@hotmail.com", contatos, assunto, mensagem, nomeAnexo, fichaTecnica);
     }
