@@ -1,0 +1,1 @@
+ALTER TABLE chamado ADD COLUMN dtconclusao DATETIME after dtcriacao;

@@ -18,6 +18,9 @@ public class ChamadoTecnico {
     @Column(name = "dtcriacao")
     private LocalDateTime dataCriacao;
 
+    @Column(name = "dtconclusao")
+    private LocalDateTime dataConclusao;
+
     @Enumerated(EnumType.STRING)
     private StatusChamadoTecnico status;
 
@@ -51,6 +54,14 @@ public class ChamadoTecnico {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public LocalDateTime getDataConclusao() {
+        return dataConclusao;
+    }
+
+    public void setDataFinalizacao(LocalDateTime dataConclusao) {
+        this.dataConclusao = dataConclusao;
     }
 
     public StatusChamadoTecnico getStatus() {
@@ -94,14 +105,17 @@ public class ChamadoTecnico {
     }
 
     public void enviarParaFila(String usuario) {
+        dataConclusao = null;
         setStatus(usuario, StatusChamadoTecnico.FILA);
     }
 
     public void enviarParaProcessamento(String usuario) {
+        dataConclusao = null;
         setStatus(usuario, StatusChamadoTecnico.PROCESSANDO);
     }
 
     public void finalizar(String usuario) {
+        dataConclusao = LocalDateTime.now();
         setStatus(usuario, StatusChamadoTecnico.FINALIZADO);
     }
 
