@@ -4,7 +4,6 @@ import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
 import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
 import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
-import br.com.carloser7.asstecnica.domain.dto.estatisticas.KpisPrincipal;
 import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.model.*;
@@ -29,8 +28,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -111,41 +108,6 @@ public class ChamadoTecnicoController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GESTOR', 'ROLE_TECNICO')")
     public ChamadoTecnico alteracaoStatusChamadoItem(@PathVariable Integer idChamado, @PathVariable Integer idItemChamado,@RequestBody ConcluiAvaliacaoItemChamadoInput concluiAvaliacao) {
         return fluxoChamadoService.alterarStatusItemChamado(idChamado, idItemChamado, concluiAvaliacao);
-    }
-
-    @GetMapping("/estatisticas/kpis-principal")
-    public List<KpisPrincipal> kpisPrincipais() {
-        return this.chamadoTecnicoRepository.kpisPrincipais(Year.now());
-    }
-
-    @GetMapping("/estatisticas/top4-produtos")
-    public List<?> top4ProdutosComDefeito() {
-        return this.chamadoTecnicoRepository.top4ProdutoDefeito(Year.now());
-    }
-
-    @GetMapping("/estatisticas/top3-clientes")
-    public List<?> top3ClienteComMaisChamados() {
-        return this.chamadoTecnicoRepository.top3ClienteComMaisChamados(Year.now());
-    }
-
-    @GetMapping("/estatisticas/top3-tecnicos")
-    public List<?> top3TecnicosMaisFinalizaraChamados() {
-        return this.chamadoTecnicoRepository.top3TecnicosMaisFinalizaramChamados(Year.now());
-    }
-
-    @GetMapping("/estatisticas/status-chamado-pordia")
-    public List<?> statusChamadosPorDia() {
-        return this.chamadoTecnicoRepository.statusChamadosPorDia();
-    }
-
-    @GetMapping("/estatisticas/status-chamado-pormes")
-    public List<?> statusChamadosPorMes() {
-        return this.chamadoTecnicoRepository.statusChamadosPorMes(Year.now());
-    }
-
-    @GetMapping("/estatisticas/itens-avaliados")
-    public KpisPrincipal qtdeItensAvaliados() {
-        return this.chamadoTecnicoRepository.qtdeDeItensAvaliados(Year.now());
     }
 
     private ChamadoTecnico toDomainObject(ChamadoInput chamadoInput) {
