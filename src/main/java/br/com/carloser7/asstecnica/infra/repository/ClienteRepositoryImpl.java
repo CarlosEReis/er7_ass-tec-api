@@ -68,11 +68,11 @@ public class ClienteRepositoryImpl implements ClienteResitoryQueries {
 
         var predicates = new ArrayList<Predicate>();
 
-        if (clienteFilter.data() != null && clienteFilter.data().dataInicial() != null)
-            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), clienteFilter.data().dataInicial()));
+        if (clienteFilter.dataInicial() != null)
+            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), clienteFilter.dataInicial()));
 
-        if (clienteFilter.data() != null && clienteFilter.data().dataFinal() != null)
-            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), clienteFilter.data().dataFinal()));
+        if (clienteFilter.dataFinal() != null)
+            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), clienteFilter.dataFinal()));
 
         var selection = builder.construct(
                 TopClientes.class,
