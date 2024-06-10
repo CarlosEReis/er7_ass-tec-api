@@ -61,17 +61,17 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
 
         var predicates = new ArrayList<Predicate>();
 
-        if (filtro.data() != null && filtro.data().dataInicial() != null)
+        if (filtro.dataInicial() != null)
             predicates.add(
                 buider.greaterThanOrEqualTo(
                     root.get("chamadoTecnico").get("dataCriacao"),
-                    filtro.data().dataInicial()));
+                    filtro.dataInicial()));
 
-        if (filtro.data() != null && filtro.data().dataFinal() != null)
+        if (filtro.dataFinal() != null)
             predicates.add(
                 buider.lessThanOrEqualTo(
                     root.get("chamadoTecnico").get("dataCriacao"),
-                    filtro.data().dataFinal()));
+                    filtro.dataFinal()));
 
         var selection = buider.construct(
                 TopProdutos.class,

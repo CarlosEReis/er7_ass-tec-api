@@ -30,11 +30,11 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryQueries {
 
         var predicates = new ArrayList<Predicate>();
 
-        if (usuariofilter.data() != null && usuariofilter.data().dataInicial() != null)
-            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), usuariofilter.data().dataInicial()));
+        if (usuariofilter.dataInicial() != null)
+            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), usuariofilter.dataInicial()));
 
-        if (usuariofilter.data() != null && usuariofilter.data().dataFinal() != null)
-            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), usuariofilter.data().dataFinal()));
+        if (usuariofilter.dataFinal() != null)
+            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), usuariofilter.dataFinal()));
 
         predicates.add(builder.equal(statusListJoin.get("status"), "FINALIZADO"));
 
