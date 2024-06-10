@@ -2,7 +2,7 @@ package br.com.carloser7.asstecnica.api.controller;
 
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.DateFitlterType;
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.KpisPrincipal;
-import br.com.carloser7.asstecnica.domain.dto.estatisticas.kpisPrincipaisNew;
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.kpisPrincipais;
 import br.com.carloser7.asstecnica.domain.filter.TopClientesFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopProdutoFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopTecnicosFilter;
@@ -27,9 +27,8 @@ public class EstatisticasController {
     @Autowired private UsuarioRepository usuarioRepository;
 
     @GetMapping("/estatisticas/kpis-principal")
-    public List<kpisPrincipaisNew> kpisPrincipais(@RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, DateFitlterType filtrarPor) {
-        //return this.chamadoTecnicoRepository.kpisPrincipais();
-        return this.chamadoTecnicoRepository.kpisPrincipaisNew(dataInicial, dataFinal, filtrarPor);
+    public List<kpisPrincipais> kpisPrincipais(@RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, DateFitlterType filtrarPor) {
+        return this.chamadoTecnicoRepository.kpisPrincipais(dataInicial, dataFinal, filtrarPor);
     }
 
     @GetMapping("/estatisticas/itens-avaliados")

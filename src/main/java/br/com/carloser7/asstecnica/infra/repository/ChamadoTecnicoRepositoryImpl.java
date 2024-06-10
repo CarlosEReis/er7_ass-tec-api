@@ -2,6 +2,7 @@ package br.com.carloser7.asstecnica.infra.repository;
 
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.DateFitlterType;
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.QtdeChamadoAbertosFechados;
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.kpisPrincipais;
 import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
 import br.com.carloser7.asstecnica.domain.repository.ChamadoTecnicoRepositoryQueries;
 import jakarta.persistence.EntityManager;
@@ -63,4 +64,41 @@ public class ChamadoTecnicoRepositoryImpl implements ChamadoTecnicoRepositoryQue
         query.where(predicates.toArray(new Predicate[0]));
         return manager.createQuery(query).getResultList();
     }
+
+    @Override
+    public List<kpisPrincipais> kpisPrincipais(LocalDate dataInicial, LocalDate dataFinal, DateFitlterType filter) {
+        var builder = manager.getCriteriaBuilder();
+        var query = builder.createQuery(kpisPrincipais.class);
+        var root = query.from(ChamadoTecnico.class);
+
+        var predicates = new ArrayList<Predicate>();
+
+        if (dataInicial != null)
+            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), dataInicial));
+
+        if (dataFinal != null)
+            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), dataFinal));
+
+        var selection = builder.construct(
+                kpisPrincipais.class,
+                builder.function("DATE", LocalDate.class, root.get("dataCriacao")),
+                root.get("status"),
+                builder.count(root.get("id")));
+
+        var expressions = new ArrayList<Expression>();
+        expressions.add(builder.function("YEAR", LocalDate.class, root.get("dataCriacao")));
+        expressions.add(builder.function("MONTH", LocalDate.class, root.get("dataCriacao")));
+        expressions.add(root.get("status"));
+
+        query.select(selection);
+        query.groupBy(expressions.toArray(new Expression[0]));
+
+        /*query.groupBy(builder.function("YEAR", LocalDate.class, root.get("dataCriacao")));
+        query.groupBy(builder.function("MONTH", LocalDate.class, root.get("dataCriacao")));
+        query.groupBy(root.get("status"));*/
+        query.where(predicates.toArray(new Predicate[0]));
+        return manager.createQuery(query).getResultList();
+    }
+
+
 }
