@@ -1,6 +1,6 @@
 package br.com.carloser7.asstecnica.domain.dto.estatisticas;
 
 public record TopUsuarios(
-    String usuario,
+    String tecnico,
     Long quantidade
 ) { }
