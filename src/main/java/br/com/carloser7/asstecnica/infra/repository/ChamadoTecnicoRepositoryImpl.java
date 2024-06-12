@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ChamadoTecnicoRepositoryImpl implements ChamadoTecnicoRepositoryQueries {
@@ -24,22 +25,19 @@ public class ChamadoTecnicoRepositoryImpl implements ChamadoTecnicoRepositoryQue
     @Override
     public List<QtdeChamadoAbertosFechados> chamadosAbertosFechados(LocalDate dataInicial, LocalDate dataFinal, DateFitlterType tipo) {
         var builder = manager.getCriteriaBuilder();
-        var query = builder.createQuery(QtdeChamadoAbertosFechados.class);
+        var query = builder.createQuery(Object[].class);
         var root = query.from(ChamadoTecnico.class);
 
-        var functionDate = builder.function("DATE", LocalDate.class, root.get("dataCriacao"));
+        Expression<String> functionDate = null;
 
         if (DateFitlterType.ANO.equals(tipo))
-            query.groupBy(
-                builder.function("YEAR", LocalDate.class, root.get("dataCriacao")));
+            functionDate = builder.function("YEAR", String.class, root.get("dataCriacao"));
 
         if (DateFitlterType.MES.equals(tipo))
-            query.groupBy(
-                builder.function("MONTH", LocalDate.class, root.get("dataCriacao")));
+            functionDate = builder.function("DATE_FORMAT", String.class, root.get("dataCriacao"), builder.literal("%Y-%m-01"));
 
         if (DateFitlterType.DIA.equals(tipo))
-            query.groupBy(
-                builder.function("DAY", LocalDate.class, root.get("dataCriacao")));
+            functionDate = builder.function("DATE_FORMAT", String.class, root.get("dataCriacao"), builder.literal("%Y-%m-%d"));
 
         var predicates = new ArrayList<Predicate>();
 
@@ -50,20 +48,28 @@ public class ChamadoTecnicoRepositoryImpl implements ChamadoTecnicoRepositoryQue
             predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), dataFinal));
 
         Expression<Long> caseExpression = builder.selectCase()
-            .when(builder.equal(root.get("status"), "FINALIZADO"), 1L)
-            .otherwise(0L).as(Long.class);
+                .when(builder.equal(root.get("status"), "FINALIZADO"), 1L)
+                .otherwise(0L).as(Long.class);
 
-        var selection = builder.construct(
-                QtdeChamadoAbertosFechados.class,
+        query.multiselect(
                 functionDate,
                 builder.count(root.get("id")),
                 builder.sum(caseExpression)
-         );
+        );
 
-        query.select(selection);
         query.where(predicates.toArray(new Predicate[0]));
-        return manager.createQuery(query).getResultList();
+        query.groupBy(functionDate);
+
+        List<Object[]> results = manager.createQuery(query).getResultList();
+
+        return results.stream()
+            .map(result -> new QtdeChamadoAbertosFechados(
+                    LocalDate.parse((String) result[0]),
+                    (Long) result[1],
+                    (Long) result[2]))
+            .collect(Collectors.toList());
     }
+
 
     @Override
     public List<kpisPrincipais> kpisPrincipais(LocalDate dataInicial, LocalDate dataFinal, DateFitlterType filter) {
