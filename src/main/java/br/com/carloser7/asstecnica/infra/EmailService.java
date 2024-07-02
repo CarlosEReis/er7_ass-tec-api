@@ -5,17 +5,23 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+// TODO: Refactor
+
 @Component
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${spring.mail.from}")
+    public String remetente;
 
     /*@EventListener
     public void teste(ApplicationReadyEvent event) {
@@ -36,6 +42,16 @@ public class EmailService {
 
             DataSource dataSource = new ByteArrayDataSource(anexo, "application/pdf");
             helper.addAttachment(nomeAxexo, dataSource);
+
+            /*MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            helper.setFrom("Carlos Reis <carlos.er7@gmail.com>");
+            helper.setTo("carlos.er7@gmail.com");
+            helper.setSubject("TESTE");
+            helper.setText("testando ass-er7-asstec", true);*/
+
+
 
             mailSender.send(mimeMessage);
             System.out.println("\n\nE-MAIL ENVIADO COM SUCESSO\n\n");

@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+// TODO: Refactor
+
 @Component
 public class ChamadoCriadoListener  {
 
@@ -56,7 +58,8 @@ public class ChamadoCriadoListener  {
         var fichaTecnica = fichaPdfChamadoService.relatorioFichaChamadoTecnico(chamado);
 
         this.emailService.enviarEmailComAnexo(
-                "carlos.er7@hotmail.com",
+//                "carlos.er7@hotmail.com",
+                "Carlos Reis <carlos.er7@gmail.com>",
                 contatos,
                 assunto,
                 mensagem,
