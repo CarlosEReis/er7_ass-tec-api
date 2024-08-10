@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.infra.repository;
 
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopUsuarioEstatistica;
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopUsuarios;
 import br.com.carloser7.asstecnica.domain.filter.TopTecnicosFilter;
 import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
@@ -10,6 +11,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryQueries {
     private EntityManager manager;
 
     @Override
-    public List<TopUsuarios> topUsuarios(TopTecnicosFilter usuariofilter) {
+    public TopUsuarioEstatistica topUsuarios(TopTecnicosFilter filtro) {
 
         var builder =  manager.getCriteriaBuilder();
         var query = builder.createQuery(TopUsuarios.class);
@@ -30,11 +32,11 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryQueries {
 
         var predicates = new ArrayList<Predicate>();
 
-        if (usuariofilter.dataInicial() != null)
-            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), usuariofilter.dataInicial()));
+        if (filtro.dataInicial() != null)
+            predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), filtro.dataInicial()));
 
-        if (usuariofilter.dataFinal() != null)
-            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), usuariofilter.dataFinal()));
+        if (filtro.dataFinal() != null)
+            predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), filtro.dataFinal()));
 
         predicates.add(builder.equal(statusListJoin.get("status"), "FINALIZADO"));
 
@@ -48,7 +50,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryQueries {
         query.groupBy(statusListJoin.get("nomeUsuario"));
         query.orderBy(builder.desc(builder.count(statusListJoin.get("nomeUsuario"))));
 
-        return manager.createQuery(query).setMaxResults(usuariofilter.top()).getResultList();
+        List<TopUsuarios> resultList = manager.createQuery(query).setMaxResults(filtro.top()).getResultList();
+
+        return new TopUsuarioEstatistica(filtro.dataInicial(), filtro.dataFinal(), null, LocalDateTime.now(), resultList);
     }
 
 }

@@ -1,8 +1,6 @@
 package br.com.carloser7.asstecnica.api.controller;
 
-import br.com.carloser7.asstecnica.domain.dto.estatisticas.DateFitlterType;
-import br.com.carloser7.asstecnica.domain.dto.estatisticas.KpisPrincipal;
-import br.com.carloser7.asstecnica.domain.dto.estatisticas.kpisPrincipais;
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.*;
 import br.com.carloser7.asstecnica.domain.filter.TopClientesFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopProdutoFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopTecnicosFilter;
@@ -26,7 +24,7 @@ public class EstatisticasController {
     @Autowired private ClienteRepository clienteRepository;
     @Autowired private UsuarioRepository usuarioRepository;
 
-    @GetMapping("/estatisticas/kpis-principal")
+    //@GetMapping("/estatisticas/kpis-principal")
     public List<kpisPrincipais> kpisPrincipais(@RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, DateFitlterType filtrarPor) {
         return this.chamadoTecnicoRepository.kpisPrincipais(dataInicial, dataFinal, filtrarPor);
     }
@@ -36,24 +34,50 @@ public class EstatisticasController {
         return this.chamadoTecnicoRepository.qtdeDeItensAvaliados(dataInicial, dataFinal);
     }
 
-    @GetMapping("/estatisticas/produtos/top-mais-defeitos")
+    //@GetMapping("/estatisticas/produtos/top-mais-defeitos")
     public List<?> top4ProdutosComDefeito(TopProdutoFilter filter) {
         return this.produtoRepository.topProdutos(filter);
     }
 
+    @GetMapping("/estatisticas/produtos/top-mais-defeitos")
+    public TopProdutoEstatistica top4ProdutosComDefeitoNovo(TopProdutoFilter filter) {
+        return this.produtoRepository.topProdutosNovo(filter);
+    }
+
     @GetMapping("/estatisticas/clientes/top-mais-chamados")
-    public List<?> top3ClienteComMaisChamados(TopClientesFilter filter) {
+    public TopClientesEstatistica top3ClienteComMaisChamados(TopClientesFilter filter) {
         return this.clienteRepository.topClientes(filter);
     }
 
     @GetMapping("/estatisticas/tecnicos/top-mais-chamados")
-    public List<?> top3TecnicosMaisFinalizaraChamados(TopTecnicosFilter filter) {
+    public TopUsuarioEstatistica top3TecnicosMaisFinalizaraChamados(TopTecnicosFilter filter) {
         return this.usuarioRepository.topUsuarios(filter);
     }
 
     @GetMapping("/estatisticas/chamados-abertos-fechados")
-    public List<?> statusChamados(@RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, @RequestParam DateFitlterType filtrarPor) {
-        return this.chamadoTecnicoRepository.chamadosAbertosFechados(dataInicial, dataFinal, filtrarPor);
+    public ConsultaEstatisticaAbertosFechados statusChamados(@RequestParam LocalDate dataInicial, @RequestParam LocalDate dataFinal, @RequestParam DateFitlterType filtrarPor) {
+        return this.chamadoTecnicoRepository.chamadosAbertosFechadosNovo(dataInicial, dataFinal, filtrarPor);
     }
 
+    // TODO: Testes
+    @GetMapping("/estatisticas/kpis-principal")
+    public List<Object> kpisPrincipaisTeste(@RequestParam LocalDate dataBase, @RequestParam LocalDate dataConfronto) {
+
+        return this.chamadoTecnicoRepository.principal(dataBase, dataConfronto );
+    }
+    // TODO: Testes
+    @GetMapping("/estatisticas/kpis-principal-all")
+    public List<Object> kpisPrincipaisAllTeste(@RequestParam LocalDate dataBase, @RequestParam LocalDate dataConfronto) {
+
+        return this.chamadoTecnicoRepository.principal(dataBase, dataConfronto );
+    }
+
+    // TODO: Testes
+    @GetMapping("/estatisticas/kpis-principal-impl")
+    public Object kpisPrincipaisTesteimpl(@RequestParam LocalDate dataBase, @RequestParam LocalDate dataConfronto, @RequestParam DateFitlterType tipoFiltro) {
+        ConsultaEstatistica consultaEstatistica = this.chamadoTecnicoRepository.kpisPrincipalImplDOIS(dataBase, dataConfronto, tipoFiltro);
+
+        System.out.println(consultaEstatistica);
+        return consultaEstatistica;
+    }
 }

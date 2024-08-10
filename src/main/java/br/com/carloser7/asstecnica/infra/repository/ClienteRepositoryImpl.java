@@ -1,6 +1,7 @@
 package br.com.carloser7.asstecnica.infra.repository;
 
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopClientes;
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopClientesEstatistica;
 import br.com.carloser7.asstecnica.domain.filter.ClienteFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopClientesFilter;
 import br.com.carloser7.asstecnica.domain.model.ChamadoTecnico;
@@ -14,6 +15,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class ClienteRepositoryImpl implements ClienteResitoryQueries {
     }
 
     @Override
-    public List<TopClientes> topClientes(TopClientesFilter clienteFilter) {
+    public TopClientesEstatistica topClientes(TopClientesFilter clienteFilter) {
 
         var builder =  manager.getCriteriaBuilder();
         var query = builder.createQuery(TopClientes.class);
@@ -75,15 +77,17 @@ public class ClienteRepositoryImpl implements ClienteResitoryQueries {
             predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), clienteFilter.dataFinal()));
 
         var selection = builder.construct(
-                TopClientes.class,
-                root.get("id"),
-                root.get("cliente").get("nome"),
-                builder.count(root.get("cliente")).alias("quantidade"));
+            TopClientes.class,
+            root.get("cliente").get("id"),
+            root.get("cliente").get("nome"),
+            builder.count(root.get("cliente")).alias("quantidade"));
 
         query.select(selection);
         query.where(predicates.toArray(new Predicate[0]));
         query.groupBy(root.get("cliente"));
         query.orderBy(builder.desc(builder.count(root.get("cliente"))));
-        return manager.createQuery(query).setMaxResults(clienteFilter.top()).getResultList();
+
+        List<TopClientes> resultList = manager.createQuery(query).setMaxResults(clienteFilter.top()).getResultList();
+        return new TopClientesEstatistica(clienteFilter.dataInicial(), clienteFilter.dataFinal(), null, LocalDateTime.now(), resultList);
     }
 }

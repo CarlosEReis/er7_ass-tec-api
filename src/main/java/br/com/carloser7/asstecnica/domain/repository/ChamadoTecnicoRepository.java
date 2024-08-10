@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, Integer>, ChamadoTecnicoRepositoryQueries {
@@ -29,4 +30,14 @@ public interface ChamadoTecnicoRepository extends JpaRepository<ChamadoTecnico, 
         GROUP BY st.status""", nativeQuery = true)
     KpisPrincipal qtdeDeItensAvaliados(@Param("dataInicial") LocalDate dataInicial, @Param("dataFinal") LocalDate dataFinal);
 
+
+    @Query(value = """
+        SELECT
+            DATE_FORMAT(c.dtcriacao, "%Y-01-01") as ano,
+            c.status,
+            count(c.id) as quantidade
+        FROM chamado c
+        WHERE YEAR(c.dtcriacao) = YEAR(:dataBase) OR YEAR(c.dtcriacao) = :dataConfronto
+        GROUP BY 1, 2""", nativeQuery = true)
+    List<Object> principal(@Param("dataBase") LocalDate dataBase, @Param("dataConfronto") LocalDate dataConfronto);
 }

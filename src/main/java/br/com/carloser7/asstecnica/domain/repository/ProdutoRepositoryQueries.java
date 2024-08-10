@@ -1,5 +1,6 @@
 package br.com.carloser7.asstecnica.domain.repository;
 
+import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopProdutoEstatistica;
 import br.com.carloser7.asstecnica.domain.dto.estatisticas.TopProdutos;
 import br.com.carloser7.asstecnica.domain.filter.ProdutoFilter;
 import br.com.carloser7.asstecnica.domain.filter.TopProdutoFilter;
@@ -12,4 +13,6 @@ public interface ProdutoRepositoryQueries {
     List<ProdutoResumoProjection> pesquisa(ProdutoFilter produtoFilter);
 
     List<TopProdutos> topProdutos(TopProdutoFilter filter);
+
+    TopProdutoEstatistica topProdutosNovo(TopProdutoFilter filtro);
 }
