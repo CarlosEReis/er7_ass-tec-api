@@ -57,4 +57,8 @@ public class CadastroClienteService {
             );
         }
     }
+
+    public boolean existePorId(Integer clienteID) {
+        return this.clienteRepository.existsById(clienteID);
+    }
 }
