@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contatos-chamado" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="10" uuid="f91a449f-a28c-4894-8d7f-4e063d3225e6">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -10,6 +10,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="contatos json"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -92,9 +93,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="200" height="12" uuid="232849fc-0f94-49f2-b07e-2a0eb4d24005">
+				<reportElement x="0" y="0" width="200" height="13" uuid="232849fc-0f94-49f2-b07e-2a0eb4d24005">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdc4f678-224e-4f30-9538-ad0194e6bfc4"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -106,7 +107,7 @@
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="150" height="12" uuid="5b88ab60-13bb-4a28-b967-b1174231e594">
+				<reportElement x="200" y="0" width="150" height="13" uuid="5b88ab60-13bb-4a28-b967-b1174231e594">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d979f7bb-0f25-42c2-b68d-07ee55e40e57"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -116,7 +117,7 @@
 				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="350" y="0" width="100" height="12" uuid="b15f6d43-b170-4907-b67b-fd871484ef2f">
+				<reportElement x="350" y="0" width="100" height="13" uuid="b15f6d43-b170-4907-b67b-fd871484ef2f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ef769655-c1dd-4c14-8742-9d8f5d39f766"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -126,7 +127,7 @@
 				<textFieldExpression><![CDATA[$F{telefone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="450" y="0" width="105" height="12" uuid="86b4f2c2-e701-432d-aedb-32ac5f74b7e8">
+				<reportElement x="450" y="0" width="105" height="13" uuid="86b4f2c2-e701-432d-aedb-32ac5f74b7e8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="06a20ed8-48a7-4d15-a7dd-56163b8a1a89"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>

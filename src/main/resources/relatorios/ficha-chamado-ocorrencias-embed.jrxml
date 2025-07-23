@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ocorrencias" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="20" uuid="1dca5b39-7cd7-4c10-80db-64776f744c9f">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ocorrencias"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -74,13 +74,12 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="70" height="12" uuid="296c4710-310f-4334-b582-f701f19b6823">
+				<reportElement x="0" y="0" width="70" height="20" uuid="296c4710-310f-4334-b582-f701f19b6823">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdc4f678-224e-4f30-9538-ad0194e6bfc4"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
@@ -88,7 +87,7 @@
 				<textFieldExpression><![CDATA[$F{sku}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="70" y="0" width="80" height="12" uuid="bbf80ce7-dcb7-4b36-a8aa-cd3c06cbccae">
+				<reportElement x="70" y="0" width="80" height="20" uuid="bbf80ce7-dcb7-4b36-a8aa-cd3c06cbccae">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdc4f678-224e-4f30-9538-ad0194e6bfc4"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -100,11 +99,10 @@
 				<textFieldExpression><![CDATA[$F{serial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement positionType="Float" x="150" y="0" width="405" height="12" uuid="03f1df19-eefc-45b6-a1e7-a51a3048fe81">
+				<reportElement positionType="Float" x="150" y="0" width="405" height="20" uuid="03f1df19-eefc-45b6-a1e7-a51a3048fe81">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fdc4f678-224e-4f30-9538-ad0194e6bfc4"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="9"/>
