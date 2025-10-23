@@ -85,30 +85,39 @@ BEGIN
 END;
 
 
-CREATE PROCEDURE fabrica_de_chamados()
+CREATE PROCEDURE fabrica_de_chamados(IN p_ano_ini INT, IN p_ano_fim INT, IN p_mes_ini INT, IN p_mes_fim INT)
 BEGIN
-  DECLARE y INT DEFAULT 1;
-  DECLARE init_count INT DEFAULT 2023;
-  DECLARE max_count INT DEFAULT 2023;
+  DECLARE a INT;
+  DECLARE m INT;
+  DECLARE d INT;
+  DECLARE dia_fim INT;
 
-  DECLARE m INT DEFAULT 1;
-  DECLARE mes_init INT DEFAULT 1;
-  DECLARE mes_fim INT DEFAULT 12;
+  SET a = p_ano_ini;
+  WHILE a <= p_ano_fim DO
+    IF a = p_ano_ini THEN
+      SET m = p_mes_ini;
+    ELSE
+      SET m = 1;
+    END IF;
 
-  DECLARE d INT DEFAULT 1;
-  DECLARE dia_init INT DEFAULT 01;
-  DECLARE dia_fim INT DEFAULT 30;
+    WHILE m <= IF(a = p_ano_fim, p_mes_fim, 12) DO
+      IF a = YEAR(CURDATE()) AND m = MONTH(CURDATE()) THEN
+        SET dia_fim = DAY(CURDATE());
+      ELSE
+        SET dia_fim = DAY(LAST_DAY(STR_TO_DATE(CONCAT(a, '-', m, '-01'), '%Y-%m-%d')));
+      END IF;
 
-  FOR y IN init_count..max_count DO
-    FOR m IN mes_init..mes_fim DO
-        IF m = 2 THEN
-            SET dia_fim = dia_fim -2;
-        END if;
-        FOR d IN dia_init..dia_fim DO
-            CALL insert_qtde_chamados_entre(DATE(CONCAT(y,LPAD(m, 2, '0'),LPAD(d, 2, '0'))), 15, 30);
-        END FOR;
-    END FOR;
-  END FOR;
+      SET d = 1;
+      WHILE d <= dia_fim DO
+        CALL insert_qtde_chamados_entre(DATE(CONCAT(a, '-', LPAD(m, 2, '0'), '-', LPAD(d, 2, '0'))), 15, 30);
+        SET d = d + 1;
+      END WHILE;
+
+      SET m = m + 1;
+    END WHILE;
+
+    SET a = a + 1;
+  END WHILE;
 END$$
 
-CALL fabrica_de_chamados();
+CALL fabrica_de_chamados(2023, 2025, 1, 12);
