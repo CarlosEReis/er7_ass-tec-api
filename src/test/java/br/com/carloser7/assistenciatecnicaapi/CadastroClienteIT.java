@@ -131,7 +131,7 @@ class CadastroClienteIT {
 			throw new RuntimeException(e);
 		}
 		Cliente finalCliente = cliente;
-		cliente.getContatos().forEach(contato -> contato.setCliente(finalCliente));
+		//cliente.getContatos().forEach(contato -> contato.setCliente(finalCliente));
 		cliente = clienteRepository.save(finalCliente);
 		return cliente;
 	}

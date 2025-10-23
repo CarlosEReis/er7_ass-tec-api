@@ -152,7 +152,7 @@ public class ChamadoTecnicoController {
 
     private Contato toDomainObject(ContatoInput contatoInput) {
         Contato contato = new Contato();
-        contato.setId(contatoInput.id());
+        //contato.setId(contatoInput.getId());
         /**contato.setNome(contatoInput.nome());
         contato.setEmail(contatoInput.email());
         contato.setTelefone(contatoInput.telefone());**/

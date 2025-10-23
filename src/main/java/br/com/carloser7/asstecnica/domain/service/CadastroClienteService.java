@@ -26,7 +26,7 @@ public class CadastroClienteService {
     @Autowired private ApplicationEventPublisher publisher;
 
     public Cliente adicionar(Cliente cliente, HttpServletResponse response) {
-        cliente.getContatos().forEach(contato -> contato.setCliente(cliente));
+        //cliente.getContatos().forEach(contato -> contato.setCliente(cliente));
         var clienteSalvo = this.clienteRepository.save(cliente);
         this.publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
         return clienteSalvo;

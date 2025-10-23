@@ -1,24 +1,12 @@
 package br.com.carloser7.asstecnica.domain.model;
 
 import br.com.carloser7.asstecnica.core.validation.DocumentoTipoPessoa;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @DocumentoTipoPessoa(documento="documento", tipoPessoa= "tipoPessoa")
 @Entity
@@ -63,10 +51,7 @@ public class Cliente {
     @Embedded
     private Endereco endereco;
 
-    @Valid
-    @NotNull
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
-    private List<Contato> contatos = new ArrayList<>();
+
 
     public Integer getId() {
         return id;
@@ -146,14 +131,6 @@ public class Cliente {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-    }
-
-    public List<Contato> getContatos() {
-        return contatos;
-    }
-
-    public void setContatos(List<Contato> contatos) {
-        this.contatos = contatos;
     }
 
     @Override
