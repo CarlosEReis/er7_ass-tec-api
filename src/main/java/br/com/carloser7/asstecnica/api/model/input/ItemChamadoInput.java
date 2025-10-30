@@ -7,6 +7,7 @@ public class ItemChamadoInput {
     private String serial;
     private String descricao;
     private ProdutoInput produto = new ProdutoInput();
+    private String posicaoTecnica;
     
     public Integer getId() {
         return id;
@@ -46,6 +47,14 @@ public class ItemChamadoInput {
 
     public void setProduto(ProdutoInput produto) {
         this.produto = produto;
+    }
+
+    public String getPosicaoTecnica() {
+        return posicaoTecnica;
+    }
+
+    public void setPosicaoTecnica(String posicaoTecnica) {
+        this.posicaoTecnica = posicaoTecnica;
     }
 
     @Override

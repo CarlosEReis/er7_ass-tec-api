@@ -1,14 +1,14 @@
 package br.com.carloser7.asstecnica.api.model.input;
 
-import java.util.List;
-
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public class ChamadoInput {
 
     @NotNull private ClienteIdInput cliente;
     @NotNull private List<ItemChamadoInput> itens;
-    @NotNull private List<ContatoInput> contatos;
+    @NotNull private List<ChamadoContatoInput> contatos;
 
     public ClienteIdInput getCliente() {
         return cliente;
@@ -26,12 +26,12 @@ public class ChamadoInput {
         this.itens = itens;
     }
 
-    public List<ContatoInput> getContatos() {
+    public List<ChamadoContatoInput> getContatos() {
         return contatos;
     }
 
-    public void setContatos(List<ContatoInput> contatos) {
+    public void setContatos(List<ChamadoContatoInput> contatos) {
         this.contatos = contatos;
     }
-    
+
 }

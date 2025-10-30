@@ -1,9 +1,6 @@
 package br.com.carloser7.asstecnica.api.controller;
 
-import br.com.carloser7.asstecnica.api.model.input.ChamadoInput;
-import br.com.carloser7.asstecnica.api.model.input.ConcluiAvaliacaoItemChamadoInput;
-import br.com.carloser7.asstecnica.api.model.input.ContatoInput;
-import br.com.carloser7.asstecnica.api.model.input.ItemChamadoInput;
+import br.com.carloser7.asstecnica.api.model.input.*;
 import br.com.carloser7.asstecnica.domain.event.ChamadoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.event.RecursoCriadoEvent;
 import br.com.carloser7.asstecnica.domain.model.*;
@@ -148,6 +145,15 @@ public class ChamadoTecnicoController {
         itemChamado.setSerial(input.getSerial());
         itemChamado.setDescricao(input.getDescricao());
         return itemChamado;
+    }
+
+    private Contato toDomainObject(ChamadoContatoInput chamadoContatoInput) {
+        Contato contato = new Contato();
+        contato.setId(chamadoContatoInput.id());
+        /**contato.setNome(contatoInput.nome());
+         contato.setEmail(contatoInput.email());
+         contato.setTelefone(contatoInput.telefone());**/
+        return contato;
     }
 
     private Contato toDomainObject(ContatoInput contatoInput) {
