@@ -8,9 +8,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.carloser7</groupId>
-	<artifactId>assistencia-tecnica-api</artifactId>
+	<artifactId>assistec-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>assistencia-tecnica-api</name>
+	<name>ER7 Assistência Técnica</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
@@ -43,10 +43,11 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.flywaydb</groupId>
